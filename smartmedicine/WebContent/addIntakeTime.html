@@ -1,0 +1,94 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="css/medikamentenVerwalten.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/addMedicine.css" rel="stylesheet">
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+	<link href="css/timedropper.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/css/bootstrap-select.min.css">
+	
+	
+	<!--javascript-->
+	<script src="http://code.jquery.com/jquery-1.12.1.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>	
+	
+	
+	<script src="js/timedropper.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script type = "text/javascript" src="js/smartmedicine.js" /></script>	
+    <script type = "text/javascript" src="js/navigation1.js" /></script>	
+	
+	    
+</head>
+<body>
+
+    <!-- overview of the current status -->
+	<table class="overview" id="tblHeaderOverview">
+	<tr>
+		<td><img  src="img/clock.png"><font ><b>Zeitpunkt</b></font></h4></td>
+	</tr>
+	</table>
+	  <br>
+  <br>
+    <!-- input fields -->         
+    <table>
+    <tr>
+    	<td width="100%"><font>Startdatum:</font><input class='form-control' type="date" id="txtStartDate" > </td>
+    	<td width="100%"><font>Startzeitpunkt:</font> <input type="text" class='form-control' id="alarm" /></font></td>
+    	</td>
+    </tr>
+    
+    
+    <tr>
+    	<td>
+    	
+ 
+    	</td>
+    </tr>
+    </table>
+    
+    <br>
+    <br>
+    <br>
+  
+    <table width="100%">
+    <tr>
+    <td> <font>Intervall:</font> </td>
+    </tr>
+    <tr>
+    <td>
+    	<button id="btnDaily" class='btn btn-primary '><img class="interval" src="img/tag_logo_2.png"></img></button>
+    	<button id="btnWeekly" class=' btn btn-primary '><img class="interval" src="img/woche_logo_2.png" ></img></button>
+    	<button id="btnMonthly" class='btn btn-primary '><img class="interval" src="img/monat_logo_2.png" ></img></button>
+    	<button id="btnNoInterval" class='btn btn-primary '><img class="interval" src="img/kein_logo_2.png"></img></button>
+    </td>
+    <td>
+    <input type="number"  class='form-control'  id="txtIteration"/>
+    
+    </td> 	
+    	 	
+    </tr>
+    
+    
+    </table>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <table width="100%" id="tblNavigation">
+    <tr>
+    	<td align="left" id="tdBackAddIntakeTime"><button id="btnAddTypeSelection" class='btn btn-primary'><font class="white">zurück</font></button></td>
+    	<td align="right""><button id="btnSaveIntakeTime" class='btn btn-success'><font class="white">speichern</font></button></td>	
+    </tr>
+    </table>
+ 
+
+</body>
+</html>
