@@ -1,31 +1,39 @@
 
 
-$(document).ready(function() {		
+$(document).ready(function() {			
+  
+	$('#btnBackToFirstAddMedicine').click(function(){
+		localStorage.setItem("note", $("#txtNote").val());
+		localStorage.setItem("stock", $("#txtStock").val());
+		localStorage.setItem("destination","addMedicine");
+		window.location = 'addMedicine.html';
+	})
+	
+	$("#btnAddMedicineForwardFirst").click(function(event){
+	    window.location = 'addMedicine2.html';
+	});
+	
+	$("#btnAddMedicineForwardSecond").click(function(event){
+	    window.location = 'addIntakeTime.html';
+	});
 	
 	/**
-	* Navigation links for manageContactPerson.html
-	* 
-	*/
-
-	
-	
-  /**
    * Navigation links for managenotification.html
    * 
    */
    $("#btnConfiguration").click(function(event){
 	   window.localStorage.clear(); 
-	   $('#divContainer').load('configuration.html');
+	   window.location='configuration.html';
   });
    
    $("#btnVisual").click(function(event){
 	   window.localStorage.clear(); 
-	   $('#divContainer').load('visual.html');
+	   window.location='visual.html';
   });
    
    $("#btnAcoustical").click(function(event){
 	   window.localStorage.clear(); 
-	   $('#divContainer').load('acoustical.html');
+	   window.location='acoustical.html';
   });	
 	
 	
@@ -35,26 +43,28 @@ $(document).ready(function() {
 	
   $("#btnAddMedicine").click(function(event){
 	  localStorage.setItem("destination", "addMedicine");
-	  $('#divContainer').load('addMedicine.html');
+	  window.location='addMedicine.html';
   });
   
   $("#btnIntakeTimeOverview").click(function(event){
 	  localStorage.setItem("destination", "addIntakeTimeOverview");
-      $('#divContainer').load('addIntakeTimeOverview.html');
+	  window.location='addIntakeTimeOverview.html';
   });
 	
  /**
   * Navigation links for start.html
   */
- $("#btnConfiguration").click(function(event){
-	 window.localStorage.clear(); 
-     $('#divContainer').load('configuration.html');
- });
+  $('#btnConfiguration').click(function(){
+	  window.localStorage.clear(); 
+      window.location='configuration.html'
+  });
  
  $("#btnManageMedicine").click(function(event){
 	 window.localStorage.clear(); 
-     $('#divContainer').load('manageMedicine.html');
+	 window.location='manageMedicine.html';
  });
+ 
+ 
  
  
  /**
@@ -62,30 +72,30 @@ $(document).ready(function() {
   */ 
  $("#btnAddTypeSelection").click(function(event){
 	 window.localStorage.clear(); 
-     $('#divContainer').load('addTypeSelection.html');
+	 window.location='addTypeSelection.html';
  });
  
  $("#btnEditMedicine").click(function(event){
 	 window.localStorage.clear(); 
 	 localStorage.setItem("destination", "editMedicine");
-     $('#divContainer').load('editMedicine.html');
+	 window.location='editMedicine.html';
  });
  
  $("#btnDeleteMedicine").click(function(event){
 	 window.localStorage.clear(); 
 	 localStorage.setItem("destination", "deleteMedicine");
-     $('#divContainer').load('deleteMedicine.html');
+	 window.location='deleteMedicine.html';
  });
  
  $("#btnMedicineOverview").click(function(event){
 	 window.localStorage.clear(); 
 	 localStorage.setItem("destination", "medicineOverview");
-     $('#divContainer').load('medicineOverview.html');
+	 window.location='medicineOverview.html';
  });
  
  $("#btnStart").click(function(event){
 	  window.localStorage.clear(); 
-	  $('#divContainer').load('start.html');
-});
+	  window.location='start.html';
+ });
  
 });

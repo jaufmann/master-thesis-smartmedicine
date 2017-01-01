@@ -4,7 +4,7 @@ div.header{
 }
 
 div.divContainer {
-  	width:100%;
+  	width:98%;
   	margin: auto;
 }
 
@@ -19,8 +19,8 @@ table.tableContainerMain{
 }
 
 .custom {
-    width: 65px !important;
-    height: 51px !important;
+    width: 33px !important;
+    height: 35px !important;
 }
 
 tr.head{

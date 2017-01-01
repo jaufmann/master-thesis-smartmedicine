@@ -3,6 +3,7 @@
  */
 $(function(){ 
 	$('#bootstrap-table').ready(function() {
+		
 		  /*getMedicineInformation();
 		  $('#bootstrap-table').bdt();
 	      $("#page-rows-form").children("option[value='3']").prop('selected',true)*/
