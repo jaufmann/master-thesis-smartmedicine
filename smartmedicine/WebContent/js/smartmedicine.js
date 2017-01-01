@@ -17,7 +17,6 @@ $(document).ready(function() {
 	
 	$('#bootstrap-table').ready(function() {
 		var destination = localStorage.getItem("destination");
-		
 		if(destination=="deleteMedicine"){
 			loadDeleteMedicineInformationTable();
 		} else if(destination=="editMedicine"){
@@ -25,33 +24,32 @@ $(document).ready(function() {
 		} else if(destination=="medicineOverview"){
 			loadMedicineOverviewTable();
 	 	} else if(destination=="medicineOverviewIntakeTime"){
-	 		loadIntakeTimeOverviewTable();
-	 		/*
-	 		$('#tdBackIntakeTimeOverview').empty();
-			$("<button id='btnBackMedicineOverview' class='btn btn-primary'><font class='white'>zurück</font></button>").appendTo("td[id='tdBackIntakeTimeOverview']");
+	 		loadIntakeTimeOverview2();
+	 		
+	 		$('#tdBack').empty();
+			$("<button id='btnBackMedicineOverview' class='btn btn-primary'><font class='white'>zur&uuml;ck</font></button>").appendTo("td[id='tdBack']");
 			$('#btnBackMedicineOverview').click(function(){
 				localStorage.setItem("destination", "medicineOverview");
-				$('#divContainer').load('medicineOverview.html');
-			})*/	
+				window.location = 'medicineOverview.html';
+			})
 	 	} else if(destination=="addOnlyIntakeTimeOverview"){
-	 	
 	 		$('#tdBack').empty();
-			$("<button id='btnBackToAddIntakeTimeOverview' class='btn btn-primary'><font class='white'>zurück</font></button>").appendTo("td[id='tdBack']");
+			$("<button id='btnBackToAddIntakeTimeOverview' class='btn btn-primary'><font class='white'>zur&uuml;ck</font></button>").appendTo("td[id='tdBack']");
 			$('#btnBackToAddIntakeTimeOverview').click(function(){
 				localStorage.setItem("destination", "addIntakeTimeOverview");
 				window.location ='addIntakeTimeOverview.html';
 			})	
 			
-	 		loadIntakeTimeOverviewTable();
+			loadIntakeTimeOverview2();
 	 	} else if(destination=="medicineIntakeTimeOverview"){
-	 		$('#tdBackIntakeTimeOverview').empty();
-			$("<button id='btnBackToMedicineOverview' class='btn btn-primary'><font class='white'>zurück</font></button>").appendTo("td[id='tdBackIntakeTimeOverview']");
+	 		$('#tdBack').empty();
+			$("<button id='btnBackToMedicineOverview' class='btn btn-primary'><font class='white'>zur&uuml;ck</font></button>").appendTo("td[id='tdBack']");
 			$('#btnBackToMedicineOverview').click(function(){
 				localStorage.setItem("destination", "medicineOverview");
 				window.location='medicineOverview.html';
 			})	
 			
-	 		loadIntakeTimeOverviewTable();
+			loadIntakeTimeOverview2();
 	 	}
 		
 		else if(destination=="addOnlyIntakeTime"){
@@ -83,7 +81,7 @@ $(document).ready(function() {
 			
 
 			$('#tdBackAddIntakeTime').empty();
-			$("<button id='btnBackToEditIntakeItemOverview' class='btn btn-primary'><font class='white'>zurück</font></button>").appendTo("td[id='tdBackAddIntakeTime']");
+			$("<button id='btnBackToEditIntakeItemOverview' class='btn btn-primary'><font class='white'>zur&uuml;ck</font></button>").appendTo("td[id='tdBackAddIntakeTime']");
 			$('#btnBackToEditIntakeItemOverview').click(function(){
 				localStorage.setItem("destination", "editIntakeTimeOverview");
 				window.location = 'editIntakeTimeOverview.html';
@@ -111,6 +109,14 @@ $(document).ready(function() {
 			$("#txtNote").val(localStorage.getItem("note"));
 			$("#txtStock").val(localStorage.getItem("stock"));
 		} else if(destination=="addIntakeTime"){
+			
+			$('#tblHeaderOverview').empty();
+			$("<tr><td><img class='transparent' src='img/pills-blue.png'><font class='transparent'><b>Allgemein</b></font></h4></td>" +
+			  "<td><img class='transparent'  src='img/Information_icon.png'><font class='transparent'><b>Zeitpunkt</b></font></td>" +
+			  "<td><img   src='img/clock.png'><font><b>Zeitpunkt</b></font></h4></td></tr>").appendTo("table[id='tblHeaderOverview']");
+			
+			
+			
 			if(localStorage.getItem("iteration")!=null){
 				$('#txtIteration').val(localStorage.getItem("iteration"));
 			}  
@@ -131,14 +137,13 @@ $(document).ready(function() {
 			$('#txtIteration').attr('disabled', true);
 			
 			$('#tdBackAddIntakeTime').empty();
-			$("<button id='btnBackToAddMedicine' class='btn btn-primary'><font class='white'>zurück</font></button>").appendTo("td[id='tdBackAddIntakeTime']");
+			$("<button id='btnBackToAddMedicine' class='btn btn-primary'><font class='white'>zur&uuml;ck</font></button>").appendTo("td[id='tdBackAddIntakeTime']");
 			$('#btnBackToAddMedicine').click(function(){
 				localStorage.setItem("iteration", $('#txtIteration').val());
 				localStorage.setItem("startDate", $('#txtStartDate').val());
 				localStorage.setItem("alarm", $('#alarm').val());
 				localStorage.setItem("destination", "addMedicine2");
 				window.location = 'addMedicine2.html';
-
 			})	
 		}
 		
@@ -149,18 +154,15 @@ $(document).ready(function() {
 			|| destination == "medicineOverviewIntakeTime"){
 	
 		    $('#example').DataTable( {	
+		    	
+		    	"lengthChange": false,
 		    	 columnDefs: [
 		             {
-		                 targets: [ 0, 1, 2 ],
+		                 targets: [0, 1, 2],
 		                 className: 'mdl-data-table__cell--non-numeric'
 		             }
 		         ],
 		    	"lengthMenu": [[3, 25, 50, -1], [3, 25, 50, "All"]],
-		        columns: [
-		            { title: "Medikament" },
-		            { title: "Termine" },
-		            { title: "Löschen" },
-		        ]
 		    } );	 
        }
 	});
@@ -346,6 +348,8 @@ $(document).ready(function() {
 	        	if(destination=="addOnlyIntakeTime"){
 	        		localStorage.setItem("destination", "addIntakeTimeOverview");
 	        		window.location = 'addIntakeTimeOverview.html';
+	        	} else {
+	        		$('#saveStatusModal').click();
 	        	}
 	        },
 	        error: function(jqXHR, textStatus, errorThrown){
@@ -486,7 +490,8 @@ $(document).ready(function() {
 			    		
 			    		$("<tr><td><font>"+date+"</font></td>" 
 			    		+ "<td><font>"+time+"</font></td>" 
-			    		+ "<td><font>"+intakeStatus+"</font></td>").appendTo("table[id='example']");
+			    		+ "<td><font>eins</font></td>" +
+			    		+ "<td><font>zwei</font></td></tr>").appendTo("table[id='example']");
 			    		
 			    	}		    
 				   },
@@ -683,6 +688,48 @@ $(document).ready(function() {
 	
 	
 	
+	
+	
+	function loadIntakeTimeOverview2() {
+		  $.ajax({
+			    dataType: 'json',
+			    async:false,
+			    success: function(data) {
+			    	for(var i=0;i<data.intaketime.length;i++){
+			    		var unparsedDate = new Date();
+			    		unparsedDate.setTime(data.intaketime[i].intakeTime*1000);
+			    		var dayName = parseDayToDayName(unparsedDate.getDay());
+			    		var monthName = parseMonthToMonthName(unparsedDate.getMonth());
+			    		var date = ""+dayName+", den "+unparsedDate.getDate()+" "+monthName;
+			    		var time = ""+parseHour(unparsedDate.getHours())+":"+parseMinute(unparsedDate.getMinutes());
+			    		
+			    		var nofiticationStatus = "";
+			    		var intakeStatus = "";
+			  
+			    		if(data.intaketime[i].notificationTriggered==true){
+			    			nofiticationStatus = "Ausgelöst";
+			    			if(data.intaketime[i].intakeTriggered==true){
+			    				intakeStatus = "Eingenommen"
+			    			} else {
+			    				intakeStatus = "Einnahme verpasset"
+			    			}
+			    		} else {
+			    			nofiticationStatus = "Ausstehend";
+			    			intakeStatus = "Ausstehend"
+			    		}
+			    		
+			    		$("<tr><td>" +date+"</td>"+
+			    		  "<td>"+time+"</td>" +
+			    		  "<td>"+nofiticationStatus+"</td>" +
+			    		  "<td>"+intakeStatus+"</td></tr>").appendTo("table[id='example']");
+			    	}		    
+				   },
+				    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getIntakeTimeByMedicineID/'+localStorage.getItem('medicineID')
+			});
+	};
+	
+	
+	
 	function deleteMedicineInformation(medicineID) {
 		$.ajax({
 	        type: 'DELETE',
@@ -719,7 +766,9 @@ $(document).ready(function() {
 			    		
 			    		$("<tr><td><font>"+data.medicine[i].medicineName+"</font></td>"  
 			    		+ buttonIntakeTime
-			    		+ "<td align='center'><button value="+data.medicine[i].id+" id='editMedicine"+i+"' type='button' class='btn btn-warning'><img class='btnClass' src='img/edit_icon.png' width='40' heigth='40'/></button></td>").appendTo("table[id='example']");
+			    		+ "<td align='center'><button value="+data.medicine[i].id+" id='editMedicine"+i+"' type='button' class='btn btn-warning'>" +
+			    				"<img class='btnClass' src='img/edit_icon.png' width='40' heigth='40'/></button></td>" +
+			    				"<td>hu</td>").appendTo("table[id='example']");
 					    
 			    		$("#intakeTime"+i).unbind('click').click(function () {
 				    		init_value = ($(this).val());

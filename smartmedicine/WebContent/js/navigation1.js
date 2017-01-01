@@ -65,6 +65,11 @@ $(document).ready(function() {
  });
  
  
+ $("#btnNo").click(function(event){
+	 window.localStorage.clear(); 
+	 window.location='start.html';
+ });
+ 
  
  
  /**
