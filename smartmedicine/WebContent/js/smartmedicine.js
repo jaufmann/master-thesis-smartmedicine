@@ -538,7 +538,7 @@ $(document).ready(function() {
 			    		
 			    		$("<tr><td><font>"+date+"</font></td>" 
 			    		+ "<td><font>"+time+"</font></td>" 
-			    		+ "<td align='center'><button value="+data.intaketime[i].intakeTimeID+" id='editIntakeTime"+i+"' type='button' class='btn btn-warning'><img src='img/edit_icon.png' width='50' heigth='50'/></button></td></tr>").appendTo("table[id='example']");
+			    		+ "<td align='center'><button value="+data.intaketime[i].intakeTimeID+" id='editIntakeTime"+i+"' type='button' class='btn btn-warning'><img src='img/edit_icon.png' width='40' heigth='40'/></button></td></tr>").appendTo("table[id='example']");
 			    		
 			    		$("#editIntakeTime"+i).unbind('click').click(function () {
 				    		init_value = ($(this).val());
@@ -626,7 +626,7 @@ $(document).ready(function() {
 			    		
 			    		$("<tr><td><font>"+data.medicine[i].medicineName+"</font></td>"  
 			            + buttonIntakeTime
-			    		+ "<td align='center'><button value="+data.medicine[i].id+" id='deleteMedicine"+i+"' type='button' class='btn btn-primary'><img class='btnClass' src='img/zoom_icon.png' width='40' heigth='40'/></button></td>").appendTo("table[id='example']");
+			    		+ "<td align='center'><button value="+data.medicine[i].id+" id='medicineInformation"+i+"' type='button' class='btn btn-primary'><img class='btnClass' src='img/zoom_icon.png' width='40' heigth='40'/></button></td>").appendTo("table[id='example']");
 					    
 			    		$("#intakeTime"+i).unbind('click').click(function () {
 				    		init_value = ($(this).val());
@@ -635,10 +635,10 @@ $(document).ready(function() {
 				    		window.location = 'intakeTimeOverview.html';
 			    		});
 			    		
-			    		$("#deleteMedicine"+i).unbind('click').click(function () {
+			    		$("#medicineInformation"+i).unbind('click').click(function () {
 				    		init_value = ($(this).val());
-				    		deleteMedicineInformation(init_value);
-				    		window.location = 'deleteMedicine.html';
+				    		localStorage.setItem('destination', "medicineInformation");
+				    		window.location = 'medicineInformation.html';
 			    		});
 			    	}		    
 				   },
