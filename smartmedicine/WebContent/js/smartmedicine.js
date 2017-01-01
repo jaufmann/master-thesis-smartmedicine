@@ -767,8 +767,7 @@ $(document).ready(function() {
 			    		$("<tr><td><font>"+data.medicine[i].medicineName+"</font></td>"  
 			    		+ buttonIntakeTime
 			    		+ "<td align='center'><button value="+data.medicine[i].id+" id='editMedicine"+i+"' type='button' class='btn btn-warning'>" +
-			    				"<img class='btnClass' src='img/edit_icon.png' width='40' heigth='40'/></button></td>" +
-			    				"<td>hu</td>").appendTo("table[id='example']");
+			    				"<img class='btnClass' src='img/edit_icon.png' width='40' heigth='40'/></button></td>").appendTo("table[id='example']");
 					    
 			    		$("#intakeTime"+i).unbind('click').click(function () {
 				    		init_value = ($(this).val());
