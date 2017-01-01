@@ -13,20 +13,34 @@
      <script src="js/datatable/dataTables.bootstrap4.min.js"></script>
 	<script type = "text/javascript" src="js/smartmedicine.js" /></script>
 	<script type = "text/javascript" src="js/navigation1.js" /></script>
+		<style type="text/css">
+		#parent
+		{
+		  position: relative;
+		}
+		#child_1, #child_2
+		{
+		  width: 600px;
+		  height: 70px;
+		  position: absolute;
+		}
+	</style>
 </head>
 <body>
 
-
-	
-<br>
  <div class="divContainer" id="divContainer"> 
-     
+   <div id="parent">
+      <div id="child_1"><h3 style="color:#2875BD"><b>Statistik </b></h3></font></div>
+   </div>
+   <br>
+   <br>
 
-<h4>Medikamenteninformaitonen</h4>    
-<br> 
      <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
      
        <thead>
+           <tr>
+                <th colspan="4"><font>Medikamenteninformationen</font></th>
+            </tr>
             <tr>
                 <th>Medikament</th>
                 <th>Krankheit/Beschwerde</th>
@@ -36,23 +50,24 @@
         </thead>
         <tbody>
         	<tr>
-        	<td>hi</td>
-        	<td>hi</td>
+        	<td>Mucosulvan</td>
+        	<td>Husten</td>
         	<td>3 von 4</td>
         	<td>2</td>
         	</tr>
         </tbody>
      </table>
 
-     <h4>Termininformation</h4>
-     <br>
      <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
        <thead>
             <tr>
+                <th colspan="4"><font>Termininformationen</font></th>
+            </tr>
+            <tr>
                 <th>Anzahl Termine</th>
                 <th>Termine ausgelöst</th>
-                <th>Medikamente eingenommen</th>
-                <th>Medikamente verpasst</th>
+                <th>Termine wahrgenommen</th>
+                <th>Termine verpasst</th>
             </tr>
         </thead>
         <tbody>
