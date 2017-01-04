@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import classes.IntakeTime;
 import classes.Medicine;
+import classes.NotificationConfiguration;
 import database.DBStatements;
 
 @Path("/medicineinformation")
@@ -45,6 +46,17 @@ public class Rest {
 	  	
 		jsonObject.put("medicine", dbstatement.getMedicineInformation());
 		return Response.status(200).entity(jsonObject.toString()).build();
+	  }
+	  
+	  @GET
+	  @Path("/getNotificationConfiguration")
+	  @Produces("application/json")
+	  public NotificationConfiguration getNotificationConfiguration() throws JSONException, ClassNotFoundException, SQLException, IOException, ParseException {
+	  	jsonObject = new JSONObject();
+	  	dbstatement = new DBStatements();
+	  	
+		jsonObject.put("notificationConfiguration", dbstatement.getNotificationConfiguration().toString());
+		return dbstatement.getNotificationConfiguration();
 	  }
 	  
 	  @GET

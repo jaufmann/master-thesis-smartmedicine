@@ -718,10 +718,10 @@ $(document).ready(function() {
 			    			intakeStatus = "Ausstehend"
 			    		}
 			    		
-			    		$("<tr><td>" +date+"</td>"+
-			    		  "<td>"+time+"</td>" +
-			    		  "<td>"+nofiticationStatus+"</td>" +
-			    		  "<td>"+intakeStatus+"</td></tr>").appendTo("table[id='example']");
+			    		$("<tr><td><font>" +date+"</font></td>"+
+			    		  "<td><font>"+time+"</td>" +
+			    		  "<td><font>"+nofiticationStatus+"</font></td>" +
+			    		  "<td><font>"+intakeStatus+"</font></td></tr>").appendTo("table[id='example']");
 			    	}		    
 				   },
 				    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getIntakeTimeByMedicineID/'+localStorage.getItem('medicineID')

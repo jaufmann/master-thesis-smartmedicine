@@ -16,6 +16,7 @@ import java.util.Collection;
 
 import classes.IntakeTime;
 import classes.Medicine;
+import classes.NotificationConfiguration;
 
 public class DBStatements {
 	
@@ -132,6 +133,33 @@ public class DBStatements {
 			if(con !=null)con.close();
 		}	
 		return listIntaketimes;		
+	}
+	
+	
+	public NotificationConfiguration getNotificationConfiguration() throws ClassNotFoundException, SQLException, ParseException, IOException{
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		IntakeTime intaketime = null;
+		String query = "SELECT * FROM notificationConfiguration";
+		NotificationConfiguration notificationConfiguration = new NotificationConfiguration();
+		
+		try{
+			con = dbconnection.getConnection();
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			while(rs.next()){
+				notificationConfiguration.setNotificationConfigurationID(rs.getInt("notificationConfigurationID"));
+				notificationConfiguration.setUseLight(rs.getBoolean("useLight"));
+				notificationConfiguration.setUseSpeaker(rs.getBoolean("useSpeaker"));
+				notificationConfiguration.setLightColor(rs.getString("lightColor"));
+			}
+		}finally{
+			if(rs != null) rs.close();
+			if(stmt != null)stmt.close();			
+			if(con !=null)con.close();
+		}	
+		return notificationConfiguration;		
 	}
 
 	public void deleteMedicineInformation(int medicineID) throws SQLException {

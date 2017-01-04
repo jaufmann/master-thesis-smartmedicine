@@ -1,7 +1,23 @@
 
 
 $(document).ready(function() {			
+	
+	$('#btnAcoustical').click(function(){
+		window.location = 'acoustical.html';
+	})
+	
+	$('#btnVisual').click(function(){
+		window.location = 'visual.html';
+	})
   
+	$('#btnManageNotification').click(function(){
+		window.location = 'manageNotification.html';
+	})
+	
+	$('#btnManageContactPerson').click(function(){
+		window.location = 'manageContactPerson.html';
+	})
+	
 	$('#btnBackToFirstAddMedicine').click(function(){
 		localStorage.setItem("note", $("#txtNote").val());
 		localStorage.setItem("stock", $("#txtStock").val());

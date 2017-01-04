@@ -1,28 +1,29 @@
 $(document).ready(function() {
-	document.getElementById("aRed").style.opacity = 0.3;    
-	document.getElementById("aBlue").style.opacity = 0.3;
-	document.getElementById("aGreen").style.opacity = 0.3;
-	document.getElementById("aViolette").style.opacity = 0.3;
+	/*$("#lighSelection").show();*/
+	$("#lighSelection").show();
 	
-	
-	if($('#toggle-event').is(':checked')==true){
+	loadVisualSettings();
+	/*if($('#toggle-event').is(':checked')==true){
 		$("#lighSelection").show();
 	} else {
 		$("#lighSelection").hide(); 
-	}
+	}*/
 });
 
 /*This class is used to change the visibility of the light selection div. If the toggle selection is true then 
 the div with the light selection will be visible*/
 
 $('#toggle-event').change(function() {
-    $('#console-event').html('Toggle: ' + $(this).prop('checked'))
+	console.log($(this).prop('checked'));
     if($(this).prop('checked')==true){
   	  $("#lighSelection").show();
     } else {
   	  $("#lighSelection").hide();
     } 
+	
+	
 })
+
 
 /*This Events are used to change images visibility by click a event.
 if a violette bulb is clicked than the other bulbs will be not visible this is also working otherwise for the other colors*/
@@ -188,6 +189,38 @@ function violetteNormal(x) {
 	$("#tdViolette").empty();
 	document.getElementById("aViolette").style.opacity = 0.3;	
 }
+
+function loadVisualSettings() {
+	  $.ajax({
+		    dataType: 'json',
+		    async:false,
+		    success: function(data) {
+		    	
+		    	if(data.useLight==true){
+		    		$('#toggle-event').bootstrapToggle('on')
+		    		$("#lighSelection").show();
+		    		$("#toggle-event").prop('checked');
+		    	} else {
+		    		$('#toggle-event').bootstrapToggle('off')
+		    		$("#lighSelection").hide();
+		    	}
+		    	
+		    	if(data.lightColor == "blue"){
+			    	document.getElementById("aRed").style.opacity = 0.3;   
+		    		$("#tdBlue").append("<font size='4'><b>Blau</b></font>");
+		    		
+		    		document.getElementById("aBlue").style.opacity = 1;
+		    		document.getElementById("aGreen").style.opacity = 0.3;
+		    		document.getElementById("aViolette").style.opacity = 0.3;
+		    	}
+		 
+
+		    	
+			   },
+		    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getNotificationConfiguration'
+		});
+};
+
     
 
 function saveVisualConfigurationData(){
