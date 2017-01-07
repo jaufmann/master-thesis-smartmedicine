@@ -29,7 +29,7 @@ import org.json.JSONObject;
 
 import classes.IntakeTime;
 import classes.Medicine;
-import classes.NotificationConfiguration;
+import classes.NotificationSetting;
 import database.DBStatements;
 
 @Path("/medicineinformation")
@@ -51,7 +51,7 @@ public class Rest {
 	  @GET
 	  @Path("/getNotificationConfiguration")
 	  @Produces("application/json")
-	  public NotificationConfiguration getNotificationConfiguration() throws JSONException, ClassNotFoundException, SQLException, IOException, ParseException {
+	  public NotificationSetting getNotificationConfiguration() throws JSONException, ClassNotFoundException, SQLException, IOException, ParseException {
 	  	jsonObject = new JSONObject();
 	  	dbstatement = new DBStatements();
 	  	
@@ -196,6 +196,51 @@ public class Rest {
 
   		dbstatement.createIntakeTimeInformation(intakeTime);
 	  }
+	  
+	  @POST @Path("/saveAccousticalSettings")
+	  @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	  @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	  public void saveAccousticalSettings(Object objAccousticalSettings) throws JSONException, ClassNotFoundException, SQLException, ParseException, IOException, org.codehaus.jettison.json.JSONException {
+	  	jsonObject = new JSONObject();
+	  	dbstatement = new DBStatements();
+	  	NotificationSetting notificationSettings = null;
+	  	  	
+	  	JSONArray arr = new JSONArray(objAccousticalSettings.toString());
+	  	
+	  	for(int i=0;i<arr.length();i++){
+	  		notificationSettings = new NotificationSetting();
+	  		org.codehaus.jettison.json.JSONObject jsonAccousticalSettings = arr.getJSONObject(i);
+	  		notificationSettings.setUseSpeaker(jsonAccousticalSettings.getBoolean("useSpeaker"));
+	  		notificationSettings.setNotificationSoundName(jsonAccousticalSettings.getString("notificationSoundName"));
+	  
+	  	}
+
+  		dbstatement.saveAccousticalSettings(notificationSettings);
+	  }
+	  
+	  
+	  @POST @Path("/saveVisualSettings")
+	  @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	  @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	  public void saveVisualSettings(Object objVisualSettings) throws JSONException, ClassNotFoundException, SQLException, ParseException, IOException, org.codehaus.jettison.json.JSONException {
+	  	jsonObject = new JSONObject();
+	  	dbstatement = new DBStatements();
+	  	NotificationSetting notificationSettings = null;
+	  	  	
+	  	JSONArray arr = new JSONArray(objVisualSettings.toString());
+	  	
+	  	for(int i=0;i<arr.length();i++){
+	  		notificationSettings = new NotificationSetting();
+	  		org.codehaus.jettison.json.JSONObject jsonVisualSettings = arr.getJSONObject(i);
+	  		notificationSettings.setLightColor(jsonVisualSettings.getString("lightColor"));
+	  		notificationSettings.setUseLight(jsonVisualSettings.getBoolean("useLight"));
+	  
+	  	}
+
+  		dbstatement.saveVisualSettings(notificationSettings);
+	  }
+	  
+	  
 	  
 	  public static Timestamp convertStringToTimestamp(String str_date) {
 		    try {

@@ -1,3 +1,6 @@
+var objLightSettings = new Object();
+var jsonArrayLightSettings = [];
+
 $(document).ready(function() {
 	/*$("#lighSelection").show();*/
 	$("#lighSelection").show();
@@ -13,15 +16,14 @@ $(document).ready(function() {
 /*This class is used to change the visibility of the light selection div. If the toggle selection is true then 
 the div with the light selection will be visible*/
 
+
 $('#toggle-event').change(function() {
-	console.log($(this).prop('checked'));
+	localStorage.setItem("useLight", $(this).prop('checked'));
     if($(this).prop('checked')==true){
   	  $("#lighSelection").show();
     } else {
   	  $("#lighSelection").hide();
-    } 
-	
-	
+    } 	
 })
 
 
@@ -51,9 +53,12 @@ $("#aViolette").click(function(){
 	$("#tdBlue").empty();
 	$("#tdGreen").empty();
 	$("#tdViolette").empty();
-	$("#tdViolette").append("<font size='4'><b>Magenta</b></font>");
+	$("#tdViolette").append("<font size='4'><button id='btnViolette' type='button' class='btn btn-primary btn-lg'>Test</button></font>");
 	
-	localStorage.setItem('ColorId', "3");
+	$('#btnViolette').click(function(){
+		testLightColor();
+	})
+	
     document.getElementById("aViolette").style.opacity = 1;
 });
 
@@ -80,16 +85,17 @@ $("#aRed").click(function(){
 	$("#tdBlue").empty();
 	$("#tdGreen").empty();
 	$("#tdViolette").empty();
-	$("#tdRed").append("<font size='4'><b>Rot</b></font>");
+	$("#tdRed").append("<button id='btnRed' type='button' class='btn btn-primary btn-lg'>Test</button>");
 	
-	localStorage.setItem('ColorId', "11");
+	$('#btnRed').click(function(){
+		testLightColor();
+	})
     document.getElementById("aRed").style.opacity = 1;
 });
 
 
 $("#aGreen").click(function(){
 	localStorage.setItem('selectedLight', "green");
-	
     document.getElementById("aRed").style.opacity = 0.3;    
     document.getElementById("aBlue").style.opacity = 0.3;
     document.getElementById("aViolette").style.opacity = 0.3;
@@ -110,15 +116,17 @@ $("#aGreen").click(function(){
 	$("#tdBlue").empty();
 	$("#tdGreen").empty();
 	$("#tdViolette").empty();
-	$("#tdGreen").append("<font size='4'><b>Grün</b></font>");
+	$("#tdGreen").append("<font size='4'><button id='btnGreen' type='button' class='btn btn-primary btn-lg'>Test</button></font>");
 	
-	localStorage.setItem('ColorId', "10");
+	$('#btnGreen').click(function(){
+		testLightColor();
+	})
+	
     document.getElementById("aGreen").style.opacity = 1;
 });	
 
 $("#aBlue").click(function(){
 	localStorage.setItem('selectedLight', "blue");
-	
     document.getElementById("aRed").style.opacity = 0.3;    
     document.getElementById("aGreen").style.opacity = 0.3;
     document.getElementById("aViolette").style.opacity = 0.3;
@@ -139,9 +147,12 @@ $("#aBlue").click(function(){
 	$("#tdBlue").empty();
 	$("#tdGreen").empty();
 	$("#tdViolette").empty();
-	$("#tdBlue").append("<font size='4'><b>Blau</b></font>");
+	$("#tdBlue").append("<font size='4'><button id='btnBlue' type='button' class='btn btn-primary btn-lg'>Test</button></font>");
 	
-	localStorage.setItem('ColorId', "9");
+	$('#btnBlue').click(function(){
+		testLightColor();
+	})
+	
     document.getElementById("aBlue").style.opacity = 1;
 });
 
@@ -206,15 +217,20 @@ function loadVisualSettings() {
 		    	}
 		    	
 		    	if(data.lightColor == "blue"){
-			    	document.getElementById("aRed").style.opacity = 0.3;   
-		    		$("#tdBlue").append("<font size='4'><b>Blau</b></font>");
-		    		
-		    		document.getElementById("aBlue").style.opacity = 1;
-		    		document.getElementById("aGreen").style.opacity = 0.3;
-		    		document.getElementById("aViolette").style.opacity = 0.3;
+		    		$( "#aBlue" ).trigger( "click" );
+		    	} 
+		    	
+		    	else if(data.lightColor == "red"){
+		    		$( "#aRed" ).trigger( "click" );
+		    	} 
+		    	
+		    	else if(data.lightColor == "green") {
+		    		$( "#aGreen" ).trigger( "click" );
+		    	} 
+		    	
+		    	else if(data.lightColor == "violette") {
+		    		$( "#aViolette" ).trigger( "click" );
 		    	}
-		 
-
 		    	
 			   },
 		    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getNotificationConfiguration'
@@ -222,6 +238,55 @@ function loadVisualSettings() {
 };
 
     
+function testLightColor() {
+	  $.ajax({
+		  	
+		    type:"POST",
+		    dataType: 'xml',
+		    url: 'http://192.168.0.108:8080/CMD?Light_scene='+localStorage.getItem('selectedLight')
+		});
+};
+
+$("#btnSaveVisualConfiguration").click(function(){ 
+	objLightSettings.lightColor = localStorage.getItem('selectedLight');
+	objLightSettings.useLight = localStorage.getItem('useLight');
+	jsonArrayLightSettings.push(objLightSettings);
+	saveVisualSettings();
+});
+
+
+
+function saveVisualSettings() {
+    $.ajax({
+        type: 'POST',
+        contentType: 'application/json',
+        url: "http://localhost:8080/smartmedicine/rest/medicineinformation/saveVisualSettings",
+        dataType: "json",
+        data: JSON.stringify(jsonArrayLightSettings),
+        success: function(data, textStatus, jqXHR){
+        	$('#btnSaveVisualNotification').trigger("click"); 
+        	
+        	
+        	setTimeout(function () {
+        		$('#btnCloseModal').trigger("click");
+            }, 2000);
+        	
+        	/*  	
+        	
+        	window.location = 'manageNotification.html';*/
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            alert('addWine error: ' + textStatus);
+        }
+    });
+}
+
+
+
+$('#btnCloseModal').click(function(){
+	window.location = "manageNotification.html";
+})
+
 
 function saveVisualConfigurationData(){
 	/*check toggle event if it is checked or not

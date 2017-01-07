@@ -16,7 +16,7 @@ import java.util.Collection;
 
 import classes.IntakeTime;
 import classes.Medicine;
-import classes.NotificationConfiguration;
+import classes.NotificationSetting;
 
 public class DBStatements {
 	
@@ -136,13 +136,13 @@ public class DBStatements {
 	}
 	
 	
-	public NotificationConfiguration getNotificationConfiguration() throws ClassNotFoundException, SQLException, ParseException, IOException{
+	public NotificationSetting getNotificationConfiguration() throws ClassNotFoundException, SQLException, ParseException, IOException{
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		IntakeTime intaketime = null;
 		String query = "SELECT * FROM notificationConfiguration";
-		NotificationConfiguration notificationConfiguration = new NotificationConfiguration();
+		NotificationSetting notificationConfiguration = new NotificationSetting();
 		
 		try{
 			con = dbconnection.getConnection();
@@ -153,6 +153,8 @@ public class DBStatements {
 				notificationConfiguration.setUseLight(rs.getBoolean("useLight"));
 				notificationConfiguration.setUseSpeaker(rs.getBoolean("useSpeaker"));
 				notificationConfiguration.setLightColor(rs.getString("lightColor"));
+				notificationConfiguration.setNotificationSoundName(rs.getString("notificationSoundName"));
+				System.out.println(rs.getString("notificationSoundName"));
 			}
 		}finally{
 			if(rs != null) rs.close();
@@ -306,6 +308,60 @@ public class DBStatements {
 		      pstmtProduct = conn.prepareStatement(sqlProduct);
 		      pstmtProduct.setInt(1, intakeTime.getIntakeTimeUnix());
 			  pstmtProduct.setInt(2, intakeTime.getIntakeTimeID());
+		      pstmtProduct.executeUpdate();
+		 } catch(Exception e){
+			 
+		 }  finally {
+	            try {   
+	            	pstmtProduct.close();
+	                conn.close();
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+		
+	}
+
+	public void saveVisualSettings(NotificationSetting notificationSettings) {
+		Connection conn = null;
+		PreparedStatement pstmtProduct = null;
+
+		try{					 
+			  conn = dbconnection.getConnection();
+			 
+	    	  String sqlProduct = " UPDATE notificationconfiguration SET useLight = ?, lightColor = ? ";
+	    	  
+		      pstmtProduct = conn.prepareStatement(sqlProduct);
+		      pstmtProduct.setString(2, notificationSettings.getLightColor());
+		      pstmtProduct.setBoolean(1, notificationSettings.isUseLight());
+		      
+		      pstmtProduct.executeUpdate();
+		 } catch(Exception e){
+			 
+		 }  finally {
+	            try {   
+	            	pstmtProduct.close();
+	                conn.close();
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }	
+	}
+	
+	
+	public void saveAccousticalSettings(NotificationSetting notificationSettings) {
+		Connection conn = null;
+		PreparedStatement pstmtProduct = null;
+
+		try{					 
+			  conn = dbconnection.getConnection();
+			 
+	    	  String sqlProduct = " UPDATE notificationconfiguration SET useSpeaker = ?, notificationSoundName = ?";
+	    	  
+		      pstmtProduct = conn.prepareStatement(sqlProduct);
+		      pstmtProduct.setBoolean(1, notificationSettings.isUseSpeaker());
+		      pstmtProduct.setString(2, notificationSettings.getNotificationSoundName());
+		      System.out.println("hier"+notificationSettings.isUseSpeaker());
 		      pstmtProduct.executeUpdate();
 		 } catch(Exception e){
 			 

@@ -563,26 +563,32 @@ $(document).ready(function() {
 			    dataType: 'json',
 			    async:false,
 			    success: function(data) {
-			    	for(var i=0;i<data.intaketime.length;i++){
-			    		var unparsedDate = new Date();
-			    		unparsedDate.setTime(parseInt(data.intaketime[i].intakeTime)*1000);
-			    		
-			    		var dayName = parseDayToDayName(unparsedDate.getDay());
-			    		var monthName = parseMonthToMonthName(unparsedDate.getMonth());
-			    		var date = ""+dayName+", den "+unparsedDate.getDate()+" "+monthName;
-			    		var time = ""+parseHour(unparsedDate.getHours())+":"+parseMinute(unparsedDate.getMinutes());
-			    		
-			    		$("<tr><td><font>"+date+"</font></td>" 
-			    		+ "<td><font>"+time+"</font></td>" 
-			    		+ "<td align='center'><button value="+data.intaketime[i].intakeTimeID+" id='deleteIntakeTime"+i+"' type='button' class='btn btn-danger'>" +
-			    				"<img src='img/delete_icon.png' width='50' heigth='50'/></button></td></tr>").appendTo("table[id='example']");
-			    		
-			    		$("#deleteIntakeTime"+i).unbind('click').click(function () {
-				    		init_value = ($(this).val());
-				    		deleteIntakeTimeInformation(init_value);
-				    		window.location = 'deleteIntakeTime.html';
-			    		});
-			    	}		    
+			    	if(data.intaketime.length != 0){
+				    	for(var i=0;i<data.intaketime.length;i++){
+				    		var unparsedDate = new Date();
+				    		unparsedDate.setTime(parseInt(data.intaketime[i].intakeTime)*1000);
+				    		
+				    		var dayName = parseDayToDayName(unparsedDate.getDay());
+				    		var monthName = parseMonthToMonthName(unparsedDate.getMonth());
+				    		var date = ""+dayName+", den "+unparsedDate.getDate()+" "+monthName;
+				    		var time = ""+parseHour(unparsedDate.getHours())+":"+parseMinute(unparsedDate.getMinutes());
+				    		
+				    		$("<tr><td><font>"+date+"</font></td>" 
+				    		+ "<td><font>"+time+"</font></td>" 
+				    		+ "<td align='center'><button value="+data.intaketime[i].intakeTimeID+" id='deleteIntakeTime"+i+"' type='button' class='btn btn-danger'>" +
+				    				"<img src='img/delete_icon.png' width='50' heigth='50'/></button></td></tr>").appendTo("table[id='example']");
+				    		
+				    		$("#deleteIntakeTime"+i).unbind('click').click(function () {
+					    		init_value = ($(this).val());
+					    		deleteIntakeTimeInformation(init_value);
+					    		window.location = 'deleteIntakeTime.html';
+				    		});
+				    	}	
+			    	} else {
+			    		localStorage.setItem("destination", "deleteMedicine");
+			    		window.location = 'deleteMedicine.html';
+			    	}
+	    
 				   },
 			    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getIntakeTimeByMedicineID/'+localStorage.getItem('medicineID')
 			});

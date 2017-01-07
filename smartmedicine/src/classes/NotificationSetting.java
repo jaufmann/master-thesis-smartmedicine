@@ -1,12 +1,13 @@
 package classes;
 
  
-public class NotificationConfiguration {
+public class NotificationSetting {
 
 	private int notificationConfigurationID;
 	private boolean useLight;
 	private boolean useSpeaker;
 	private String lightColor;
+	private String notificationSoundName;
 	
 	
 	public boolean isUseLight() {
@@ -38,5 +39,11 @@ public class NotificationConfiguration {
 	}
 	public void setLightColor(String lightColor) {
 		this.lightColor = lightColor;
+	}
+	public String getNotificationSoundName() {
+		return notificationSoundName;
+	}
+	public void setNotificationSoundName(String notificationSoundName) {
+		this.notificationSoundName = notificationSoundName;
 	}
 }

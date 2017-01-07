@@ -9,6 +9,8 @@
      <script src="js/jquery-1.9.1.min.js"></script>
      <script type = "text/javascript" src="js/navigation1.js" /></script>
 	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap2-toggle.min.js "></script>
+	<script src="js/bootstrap.min.js"></script>
+    
 </head>
 <body>
 
@@ -23,7 +25,7 @@
     <tr>
 
     	<td width="20%"><img src="img/blue_2.png" width="60px"> &nbsp;&nbsp;&nbsp;&nbsp;<font>Lichtfarbe</font></td>
-    	<td width="20%" align="right">     <input id="toggle-event" type="checkbox" data-toggle="toggle" data-size="large" data-width="150"></td>
+    	<td width="20%" align="right"> <input id="toggle-event" type="checkbox" data-toggle="toggle" data-size="large" data-width="150"></td>
     </tr>
     </table>
     <br/>
@@ -55,9 +57,35 @@
     	<td align="right"><button id="btnSaveVisualConfiguration" class='btn btn-success'><font class="white">speichern</font></button></td>	
     </tr>
     </table>
-  </div>	 
-<div id="console-event"></div>
-	<script type="text/javascript" src="js/lightSelection.js"></script>
+  </div>
+  
+  
+  
+  <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" id="btnSaveVisualNotification"
+style="visibility:hidden">
+  Launch demo modal
+</button>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+     
+        <h4 class="modal-title" id="myModalLabel"><img class="informationIcon" src="img/Information_icon.png"> Status des Speichervorgangs</h4>
+      </div>
+      <div class="modal-body" align="center">
+         <font style="color:green"><b>Einstellungen erfolgreich gespeichert</b></font>
+        
+         <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseModal" style="visibility:hidden">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  	 
 </body>
+<script type="text/javascript" src="js/lightSelection.js"></script>
 </html>
