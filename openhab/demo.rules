@@ -1,0 +1,175 @@
+import org.openhab.model.script.actions.Timer
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+import org.joda.time.*
+import java.lang.Integer.*
+import java.lang.Math
+import org.joda.time.DateTime
+
+var Timer myTimer=null
+
+
+
+var Number i = 0
+
+// Test JSONPath
+rule "Test JSONPath"
+when 
+	Time cron "0 0/1 * * * ?"   // every minute
+then
+  //sendCommand(MilightSwitch, ON)
+  //sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(300),new PercentType(100),new PercentType(100)))
+  //sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(300),new PercentType(100),new PercentType(100)))
+  //sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(300),new PercentType(100),new PercentType(100)))
+  //sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(300),new PercentType(100),new PercentType(100)))
+  //executeCommandLine("mpg321@@/music/notification.mp3")
+  //  executeCommandLine("/scripts/tts.sh@@Es ist Zeit, ihr Medikament einzunehmen.@@", 2000)
+
+  var httpG = sendHttpGetRequest("http://localhost:8080/smartmedicine/rest/medicineinformation/getIntakeTimeInformation")
+
+  var int k = -1
+  var long intakeTimeUnixTimeStamp = 0
+  var long currentTimeUnixTimeStamp = now.getMillis() / 1000L
+  var boolean notifikationTriggered = false
+  var int numberIntakeTimes = Integer::parseInt(transform("JSONPATH","$.numberIntakeTimes", httpG))
+  var boolen triggerAcousticalNotification = false
+
+  println("numberIntakeTimes "+numberIntakeTimes)
+  
+  while ((k=k+1) < numberIntakeTimes) {
+     println(k)
+     intakeTimeUnixTimeStamp= Long::parseLong(transform("JSONPATH","$.intaketime["+k+"].intakeTime", httpG))
+     notifikationTriggered = Boolean::parseBoolean(transform("JSONPATH","$.intaketime["+k+"].notificationTriggered", httpG))
+ 
+     if(intakeTimeUnixTimeStamp>currentTimeUnixTimeStamp){
+	println("noch nicht zeit")
+	println(intakeTimeUnixTimeStamp)
+
+     } else if(intakeTimeUnixTimeStamp>currentTimeUnixTimeStamp || notifikationTriggered=false ) {
+	println("es ist zeit")
+	triggerAcousticalNotification = true
+	println(intakeTimeUnixTimeStamp)
+     }     
+  }
+
+  var int a = -1
+  if(triggerAcousticalNotification=true){
+    //while ((a=a+1) < 10) {
+//	 
+	 Thread::sleep(4000)
+  //  }
+	//executeCommandLine("/scripts/tts.sh@@Es ist Zeit, ihr Medikament einzunehmen.@@", 2000)
+  }   
+end
+
+rule "Music"
+when
+	Item MilightSwitch received command 
+then
+	//executeCommandLine("mpg321@@/music/starry_heavens.mp3")
+end
+
+
+rule "Light Scenes"
+when
+Item Light_scene received command 
+then
+if (receivedCommand=="white") { 
+    var int iterationLightColor = -1
+    while ((iterationLightColor = iterationLightColor +1) < 4) {
+       sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(0),new PercentType(0),new PercentType(0)))
+       Thread::sleep(1000)
+    }
+
+	  
+}
+if (receivedCommand=="red") { 
+    var int iterationLightColor = -1
+    while ((iterationLightColor = iterationLightColor +1) < 6) {
+       sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(0),new PercentType(100),new PercentType(100)))
+       Thread::sleep(1000)
+    }
+    Thread::sleep(1000)
+    
+ //   var int iterationWhiteMode = -1
+ //   while ((iterationWhiteMode = iterationWhiteMode + 1) < 4) {
+  //  	sendCommand(MilightSwitch, OFF)
+//	Thread::sleep(300)
+//	sendCommand(MilightSwitch, ON)
+ //	Thread::sleep(500)
+   // }	
+ }
+
+if (receivedCommand=="green") { 
+    var int iterationLightColor = -1
+    while ((iterationLightColor = iterationLightColor +1) < 6) {
+        sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(120),new PercentType(100),new PercentType(100)))
+	Thread::sleep(1000)
+    }
+    Thread::sleep(1000)
+    
+ //   var int iterationWhiteMode = -1
+ //  while ((iterationWhiteMode = iterationWhiteMode + 1) < 4) {
+ //  	sendCommand(MilightSwitch, OFF)
+//	Thread::sleep(300)
+//	sendCommand(MilightSwitch, ON)
+//	Thread::sleep(500)
+ //   }	
+  }
+if (receivedCommand=="blue") { 
+
+    var int iterationLightColor = -1
+    while ((iterationLightColor = iterationLightColor +1) < 6) {
+        sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(240),new PercentType(100),new PercentType(100)))
+	Thread::sleep(1000)
+    }
+    Thread::sleep(1000)
+    
+  //  var int iterationWhiteMode = -1
+  //  while ((iterationWhiteMode = iterationWhiteMode + 1) < 4) {
+  //  	sendCommand(MilightSwitch, OFF)
+//	Thread::sleep(300)
+//	sendCommand(MilightSwitch, ON)
+//	Thread::sleep(500)
+ //   }	
+}
+
+if (receivedCommand=="violette") { 
+    var int iterationLightColor = -1
+    while ((iterationLightColor = iterationLightColor +1) < 6) {
+    	sendCommand(Light_scene_ColorSelect, new HSBType(new DecimalType(300),new PercentType(100),new PercentType(100))) 
+	Thread::sleep(1000)
+    }
+    Thread::sleep(1000)
+    
+    //var int iterationWhiteMode = -1
+    //while ((iterationWhiteMode = iterationWhiteMode + 1) < 4) {
+   // 	sendCommand(MilightSwitch, OFF)
+//	Thread::sleep(300)
+//	sendCommand(MilightSwitch, ON)
+//	Thread::sleep(500)
+//    }	
+   }
+end
+
+
+
+
+
+
+
+rule "Light Scenes"
+when
+    Item AccousticalTest received command 
+then
+   if (receivedCommand=="notification1") { 
+   	 executeCommandLine("mpg321@@/music/notification_1.mp3")
+   } else if (receivedCommand=="notification2"){
+	 executeCommandLine("mpg321@@/music/notification_2.mp3")
+   } else if (receivedCommand=="notification3"){
+	 executeCommandLine("mpg321@@/music/notification_3.mp3")
+   }
+  
+end
+
