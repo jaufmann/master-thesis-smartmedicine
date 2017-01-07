@@ -2,9 +2,10 @@ var objLightSettings = new Object();
 var jsonArrayLightSettings = [];
 
 $(document).ready(function() {
+
 	/*$("#lighSelection").show();*/
-	$("#lighSelection").show();
-	
+	$("#lighSelection").hide();
+	setIcons();
 	loadVisualSettings();
 	/*if($('#toggle-event').is(':checked')==true){
 		$("#lighSelection").show();
@@ -12,6 +13,7 @@ $(document).ready(function() {
 		$("#lighSelection").hide(); 
 	}*/
 });
+
 
 /*This class is used to change the visibility of the light selection div. If the toggle selection is true then 
 the div with the light selection will be visible*/
@@ -25,6 +27,12 @@ $('#toggle-event').change(function() {
   	  $("#lighSelection").hide();
     } 	
 })
+
+
+	$('#toggle-event').bootstrapToggle({
+	      on: 'An',
+	      off: 'Aus'
+	  });
 
 
 /*This Events are used to change images visibility by click a event.
@@ -53,10 +61,15 @@ $("#aViolette").click(function(){
 	$("#tdBlue").empty();
 	$("#tdGreen").empty();
 	$("#tdViolette").empty();
-	$("#tdViolette").append("<font size='4'><button id='btnViolette' type='button' class='btn btn-primary btn-lg'>Test</button></font>");
+	$("#tdViolette").append("<font size='4'><button id='btnViolette' type='button' class='btn btn-primary btn-lg' >Test</button></font>");
 	
 	$('#btnViolette').click(function(){
+    	
 		testLightColor();
+		$('#myPleaseWait').modal('show');
+    	setTimeout(function () {
+    		$('#myPleaseWait').modal('hide');
+        }, 7000);
 	})
 	
     document.getElementById("aViolette").style.opacity = 1;
@@ -89,6 +102,10 @@ $("#aRed").click(function(){
 	
 	$('#btnRed').click(function(){
 		testLightColor();
+		$('#myPleaseWait').modal('show');
+    	setTimeout(function () {
+    		$('#myPleaseWait').modal('hide');
+        }, 7000);
 	})
     document.getElementById("aRed").style.opacity = 1;
 });
@@ -120,6 +137,10 @@ $("#aGreen").click(function(){
 	
 	$('#btnGreen').click(function(){
 		testLightColor();
+		$('#myPleaseWait').modal('show');
+    	setTimeout(function () {
+    		$('#myPleaseWait').modal('hide');
+        }, 7000);
 	})
 	
     document.getElementById("aGreen").style.opacity = 1;
@@ -151,6 +172,10 @@ $("#aBlue").click(function(){
 	
 	$('#btnBlue').click(function(){
 		testLightColor();
+		$('#myPleaseWait').modal('show');
+    	setTimeout(function () {
+    		$('#myPleaseWait').modal('hide');
+        }, 7000);
 	})
 	
     document.getElementById("aBlue").style.opacity = 1;
@@ -287,13 +312,19 @@ $('#btnCloseModal').click(function(){
 	window.location = "manageNotification.html";
 })
 
+function setIcons(){
+	$('#aViolette').empty();
+	$('#aViolette').append("<img onmouseover='violetteHover(this)' id='aViolette' onmouseout='violetteNormal(this)' class='myImage' src='img/violette_3.png' width='130' height='130'/>");
+  	
+	$('#aRed').empty();
+	$('#aRed').append("<img onmouseover='bigImg(this)' id='aRed' onmouseout='normalImg(this)' class='myImage' src='img/red_3.png' width='130' height='130'/>");
+  	
+	$('#aBlue').empty();
+	$('#aBlue').append("<img id='aBlue'  onmouseover='blueHover(this)' onmouseout='blueNormal(this)'  class='myImage' src='img/blue_3.png' width='130' height='130'/>");
+  	
 
-function saveVisualConfigurationData(){
-	/*check toggle event if it is checked or not
-	if($('#toggle-event').is(':checked')==true){
-		alert("hi")
-	} else {
-		alert($("#toggle-event").prop('checked'))
-		 
-	}*/
+	$('#aGreen').empty();
+	$('#aGreen').append("<img id='aGreen' onmouseover='greenHover(this)' onmouseout='greenNormal(this)' class='myImage' src='img/green_3.png' width='130' height='125'/>");
+  	
+ 
 }

@@ -20,8 +20,8 @@
 </head>
 <body>
     <!-- input fields -->        
-    <br/>
-    <br/>
+	<img src="img/akustische_erinnerung_header_2.png">
+	<hr>
     <table width="100%">
     <tr>
     	<td width="20%"><img src="img/lautsprecher_blue.png" width="60px"> &nbsp;&nbsp;&nbsp;&nbsp;<font>Lautsprecher</font></td>
@@ -30,23 +30,23 @@
     </table>
    
     <br/>
-    <br/>
+
     <div id="divNotificationSoundSelection" align="center">
     <table  style=" border-spacing: 20px; border-collapse: separate;" align="center">
     	<tr>
-    		<td id="tdNotification1"><a id="aNotification1"><img onmouseover="mouseOverNot1(this)" onmouseout="mouseOutNot1(this)" src="img/icon-audio.png" width="70" height="80"></a></td>
-    		<td id="tdNotification2"><a id="aNotification2"><img onmouseover="mouseOverNot2(this)" onmouseout="mouseOutNot2(this)" src="img/icon-audio.png" width="70" height="80"></a></td>
-    		<td id="tdNotification3"><a id="aNotification3"><img onmouseover="mouseOverNot3(this)" onmouseout="mouseOutNot3(this)" src="img/icon-audio.png" width="70" height="80"></a></td>
+    		<td id="tdNotification1"><a id="aNotification1"></a></td>
+    		<td id="tdNotification2"><a id="aNotification2"></a></td>
+    		<td id="tdNotification3"><a id="aNotification3"></a></td>
     	</tr>
     	 <tr>
-    		<td width="100px" id="tdNameNot1">Notification 1</td>
-    		<td width="100px" id="tdNameNot2">Notification 2</td>
-    		<td width="100px" id="tdNameNot3">Notification 3</td>
+    		<td width="200px" id="tdNameNot1"></td>
+    		<td width="200px" id="tdNameNot2"></td>
+    		<td width="200px" id="tdNameNot3"></td>
     	</tr>
     </table>
     </div>
     <br/>
-    <br/>
+
     
     <table width="100%">
     <tr>
@@ -81,6 +81,29 @@ style="visibility:hidden">
 
 
   
+<!-- Modal Start here-->
+<div class="modal fade bs-example-modal-sm" id="myPleaseWait" tabindex="-1"
+    role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span class="glyphicon glyphicon-time">
+                    </span>&nbsp;&nbsp;Bitte warten
+                 </h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-info
+                    progress-bar-striped active"
+                    style="width: 100%">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal ends Here -->
   
   
  <script type="text/javascript" src="js/accousticalSettings.js"></script>

@@ -1,15 +1,17 @@
  $(document).ready(function(){
-		loadAccousticalSettings();
-    	 /*
-         document.getElementById("aNotification1").style.opacity = 0.3;
-         document.getElementById("aNotification2").style.opacity = 0.3;
-         document.getElementById("aNotification3").style.opacity = 0.3;
+		 $("#divNotificationSoundSelection").hide();
+		 setIcons();
+		 loadAccousticalSettings();
+    	 
          
-         document.getElementById("tdNameNot1").style.visibility = "hidden";
-         document.getElementById("tdNameNot2").style.visibility = "hidden";
-         document.getElementById("tdNameNot3").style.visibility = "hidden";*/
      })
      
+     $('#toggle-event').bootstrapToggle({
+	      on: 'An',
+	      off: 'Aus'
+	 });
+ 
+ 
      function mouseOverNot1(x) {
 			document.getElementById("aNotification1").style.opacity = 1; 
 			$("#tdNameNot1").css("visibility", "visible");
@@ -49,14 +51,18 @@
 		 	$("#btnNot1").click(function(){
 		 		localStorage.setItem('notificationSound', "notification1");
 		 		testNotificationSound();
+				$('#myPleaseWait').modal('show');
+		    	setTimeout(function () {
+		    		$('#myPleaseWait').modal('hide');
+		        }, 3000);
 		 	})
 		 	
 		 	
 		 	$("#tdNameNot2").empty();
-		 	$("#tdNameNot2").append("Notification 2");
+		 	$("#tdNameNot2").append("<font size='4'>Aurora</font>");
 		 	
 		 	$("#tdNameNot3").empty();
-		 	$("#tdNameNot3").append("Notification 3");
+		 	$("#tdNameNot3").append("<font size='4'>Chord</font>");
 		
     		
 			document.getElementById("aNotification1").style.opacity = 1; 
@@ -82,13 +88,17 @@
 		
 		 	$("#btnNot2").click(function(){
 		 		testNotificationSound();
+				$('#myPleaseWait').modal('show');
+		    	setTimeout(function () {
+		    		$('#myPleaseWait').modal('hide');
+		        }, 3000);
 		 	})
 		 	
 		 	$("#tdNameNot3").empty();
-		 	$("#tdNameNot3").append("Notification 3");
+		 	$("#tdNameNot3").append("<font size='4'>Chord</font>");
 		 	
 		 	$("#tdNameNot1").empty();
-		 	$("#tdNameNot1").append("Notification 1");
+		 	$("#tdNameNot1").append("<font size='4'>SMS</font>");
 		 	
 			document.getElementById("aNotification2").style.opacity = 1; 
 			document.getElementById("aNotification3").style.opacity = 0.3; 
@@ -117,13 +127,17 @@
 		 	
 		 	$("#btnNot3").click(function(){
 		 		testNotificationSound();
+				$('#myPleaseWait').modal('show');
+		    	setTimeout(function () {
+		    		$('#myPleaseWait').modal('hide');
+		        }, 3000);
 		 	})
 		 	
 		 	$("#tdNameNot2").empty();
-		 	$("#tdNameNot2").append("Notification 2");
+		 	$("#tdNameNot2").append("<font size='4'>Aurora</font>");
 		 	
 		 	$("#tdNameNot1").empty();
-		 	$("#tdNameNot1").append("Notification 1");
+		 	$("#tdNameNot1").append("<font size='4'>SMS</font>");
 		 	
 			document.getElementById("aNotification3").style.opacity = 1; 
 			document.getElementById("aNotification2").style.opacity = 0.3; 
@@ -195,6 +209,26 @@
 		$('#btnCloseModal').click(function(){
 			window.location = "manageNotification.html";
 		})
+		
+		function setIcons(){
+			$('#aNotification1').empty();
+			$('#aNotification1').append("<img onmouseover='mouseOverNot1(this)' onmouseout='mouseOutNot1(this)' src='img/icon-audio.png' width='70' height='80'>");
+		
+			$('#tdNameNot1').empty();
+			$('#tdNameNot1').append("<font size='4'>SMS</font>");		
+			
+			$('#aNotification2').empty();
+			$('#aNotification2').append("<img onmouseover='mouseOverNot2(this)' onmouseout='mouseOutNot2(this)' src='img/icon-audio.png' width='70' height='80'>");
+			
+			$('#tdNameNot2').empty();
+			$('#tdNameNot2').append("<font size='4'>Aurora</font>");
+			
+			$('#aNotification3').empty();
+			$('#aNotification3').append("<img onmouseover='mouseOverNot3(this)' onmouseout='mouseOutNot3(this)' src='img/icon-audio.png' width='70' height='80'>");
+		
+			$('#tdNameNot3').empty();
+			$('#tdNameNot3').append("<font size='4'>Chord</font>");
+		}
 		
 		function saveAccousticalSettings() {
 		    $.ajax({

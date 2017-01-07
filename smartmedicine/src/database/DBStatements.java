@@ -141,7 +141,7 @@ public class DBStatements {
 		Statement stmt = null;
 		ResultSet rs = null;
 		IntakeTime intaketime = null;
-		String query = "SELECT * FROM notificationConfiguration";
+		String query = "SELECT * FROM notificationconfiguration";
 		NotificationSetting notificationConfiguration = new NotificationSetting();
 		
 		try{

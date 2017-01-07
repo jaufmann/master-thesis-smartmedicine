@@ -17,14 +17,14 @@
  <div class="divContainer" id="divContainer"> 
  
 
-   	
-    <!-- input fields -->         
-    <br/>
-    <br/>
+   	<img src="img/visuelle_einstellungen_header_2.png">
+    <!-- input fields -->     
+    <hr>    
+
     <table width="100%">
     <tr>
 
-    	<td width="20%"><img src="img/blue_2.png" width="60px"> &nbsp;&nbsp;&nbsp;&nbsp;<font>Lichtfarbe</font></td>
+    	<td width="20%"><img src="img/blue_2.png" width="40px"> &nbsp;&nbsp;&nbsp;&nbsp;<font>Lichtfarbe</font></td>
     	<td width="20%" align="right"> <input id="toggle-event" type="checkbox" data-toggle="toggle" data-size="large" data-width="150"></td>
     </tr>
     </table>
@@ -35,10 +35,10 @@
 	<div id="lighSelection" align="center" style="background-color:#FFFFFF">
 	<table>
 		<tr>
-		  	<td><a id="aViolette"><img onmouseover="violetteHover(this)" id="aViolette" onmouseout="violetteNormal(this)" class="myImage" src='img/violette_3.png' width='130' height='130'/></a></td>
-		    <td><a id="aRed"><img onmouseover="bigImg(this)" id="aRed" name="red" onmouseout="normalImg(this)" class="myImage" src='img/red_3.png' width='130' height='130'/></a></td>
-		    <td><a id="aBlue"><img id="aBlue" name="red" onmouseover="blueHover(this)" onmouseout="blueNormal(this)"  class="myImage" src='img/blue_3.png' width='130' height='130'/></a></td>
-		    <td><a id="aGreen"><img id="aGreen" name="red" onmouseover="greenHover(this)" onmouseout="greenNormal(this)" class="myImage" src='img/green_3.png' width='130' height='125'/></a></td>
+		  	<td><a id="aViolette"></a></td>
+		    <td><a id="aRed"></a></td>
+		    <td><a id="aBlue"></a></td>
+		    <td><a id="aGreen"></a></td>
 		</tr>
 	  	<tr>
 			<td align="center" id="tdViolette"></td>
@@ -49,8 +49,7 @@
 	</table>
 	</div>
     <br/>
-    <br/>
-    <br/>    
+    <br/> 
     <table width="100%">
     <tr>
     	<td align="left"><button id="btnManageNotification" class='btn btn-primary'><font class="white">zurück</font></button></td>
@@ -83,6 +82,32 @@ style="visibility:hidden">
     </div>
   </div>
 </div>
+
+
+
+<!-- Modal Start here-->
+<div class="modal fade bs-example-modal-sm" id="myPleaseWait" tabindex="-1"
+    role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span class="glyphicon glyphicon-time">
+                    </span>&nbsp;&nbsp;Bitte warten
+                 </h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-info
+                    progress-bar-striped active"
+                    style="width: 100%">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal ends Here -->
 
 
   	 
