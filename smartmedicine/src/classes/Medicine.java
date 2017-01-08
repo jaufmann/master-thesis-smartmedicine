@@ -8,6 +8,7 @@ public class Medicine {
 	private String note;
 	private int stock;
 	private String disease;
+	private String pertinence;
 	private ArrayList<Integer> listIntakeTimeIDs;
 
 	public int getId() {
@@ -56,6 +57,20 @@ public class Medicine {
 
 	public void setListIntakeTimeIDs(ArrayList<Integer> newList) {
 		this.listIntakeTimeIDs = newList;
+	}
+
+	public String getPertinence() {
+		return pertinence;
+	}
+
+	public void setPertinence(String pertinence) {
+		this.pertinence = pertinence;
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "pertinence";
 	}
 
 }

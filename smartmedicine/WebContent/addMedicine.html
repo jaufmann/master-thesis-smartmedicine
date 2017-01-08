@@ -15,7 +15,7 @@
 </head>
 <body>
 
-
+<div class="divContainer" id="divContainer"> 
     <!-- overview of the current status -->
 	<table class="overview" id="tblHeaderOverview">
 	<tr>
@@ -36,15 +36,38 @@
     	<td width="100"></td>
     </tr>
     </table>
+    
+    
     <br/>
+    <table>
+    <tr>
+	    <td> <font>Relevanz:</font> </td>
+     </tr>
+     </table>
+	    
+  	  <div >
+	    <table>
+	    <tr>
+	    <td>
+	    	<button id="btnImportant" class='btn btn-danger '><img class="interval" src="img/wichtig_logo.png"></img></button>
+	    	<button id="btnNormal" class=' btn btn-success '><img class="interval" src="img/Normal_logo.png" ></img></button>
+	    </td>
+	    	 
+	    </tr>
+	    
+	    </table>
+    </div>
+    </br>
     
     <table width="100%">
     <tr>
     	<td align="left"><button id="btnAddTypeSelection" class='btn btn-primary'><font class="white">zurück</font></button></td>
-    	<td align="right"><button id="btnAddMedicineForwardFirst" class='btn btn-danger'><font class="white">weiter</font></button></td>	
+    	<td align="right"><button id="btnAddMedicineForwardFirst" class='btn btn-warning'><font class="white">weiter</font></button></td>	
     </tr>
     </table>
+    
+    
   </div>
-
+</div>
 </body>
 </html>

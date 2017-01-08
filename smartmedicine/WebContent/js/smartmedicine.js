@@ -19,6 +19,8 @@ $(document).ready(function() {
 		var destination = localStorage.getItem("destination");
 		if(destination=="deleteMedicine"){
 			loadDeleteMedicineInformationTable();
+		} else if(destination=="medicineInformation"){
+			loadMedicInformation();
 		} else if(destination=="editMedicine"){
 			loadEditMedicineInformationTable();
 		} else if(destination=="medicineOverview"){
@@ -105,6 +107,17 @@ $(document).ready(function() {
 		else if(destination=="addMedicine"){
 			$('#txtMedicineName').val(localStorage.getItem("medicineName"));
 			$('#txtDisease').val(localStorage.getItem("disease"));
+			
+			if(localStorage.getItem("pertinence")==null){
+				$('#btnNormal').click();
+			} else if(localStorage.getItem("pertinence")=="important"){
+				$('#btnImportant').click();
+			} else {
+				$('#btnNormal').click();
+			}
+			
+			
+		
 		} else if(destination=="addMedicine2"){
 			$("#txtNote").val(localStorage.getItem("note"));
 			$("#txtStock").val(localStorage.getItem("stock"));
@@ -328,6 +341,7 @@ $(document).ready(function() {
 		objMedicineInformation.disease = localStorage.getItem("disease");
 		objMedicineInformation.note = localStorage.getItem("note");
 		objMedicineInformation.stock = localStorage.getItem("stock");
+		objMedicineInformation.pertinence = localStorage.getItem("pertinence");
 
 	    jsonObjMedicineInformation = JSON.stringify(objMedicineInformation);
 		
@@ -423,6 +437,19 @@ $(document).ready(function() {
 		localStorage.setItem("medicineName", $('#txtMedicineName').val());
 		localStorage.setItem("destination","addMedicine2");
 		$('#divContainer').load('addMedicine2.html');
+	})
+	
+	$('#btnImportant').click(function(){
+		localStorage.setItem("pertinence", "important");
+		document.getElementById("btnImportant").style.opacity = 1; 
+		document.getElementById("btnNormal").style.opacity = 0.3; 
+	})
+	
+	$('#btnNormal').click(function(){
+		localStorage.setItem("pertinence", "normal");
+		
+		document.getElementById("btnImportant").style.opacity = 0.3; 
+		document.getElementById("btnNormal").style.opacity = 1; 
 	})
 	
 	$('#btnAddMedicineForwardSecond').click(function(){
@@ -616,6 +643,8 @@ $(document).ready(function() {
 	 * medicineOverview.html functions
 	 */
 	
+
+	
 	function loadMedicineOverviewTable() {
 		  $.ajax({
 			    dataType: 'json',
@@ -625,14 +654,14 @@ $(document).ready(function() {
 			    		var intakeTimes = countIntakeTimeIDs(data.medicine[i].id);
 			    		var buttonIntakeTime ="";
 			    		if(intakeTimes>0){
-			    			buttonIntakeTime="<td align='center'><button width='40' heigth='40' value="+data.medicine[i].id+" id='intakeTime"+i+"' type='button' class='btn btn-primary custom' style='background: url(img/calendar_2.png) no-repeat;'><font style='color:blue'>"+intakeTimes+"</font></button></td>";
+			    			buttonIntakeTime="<td align='center'><button width='35' heigth='40' value="+data.medicine[i].id+" id='intakeTime"+i+"' type='button' class='btn btn-primary custom' style='background: url(img/calendar_2.png) no-repeat;'><font style='color:blue'>"+intakeTimes+"</font></button></td>";
 			    		} else {
-			    			buttonIntakeTime="<td align='center'><button value="+data.medicine[i].id+" id='intakeTime"+i+"' type='button' class='btn btn-primary custom' style='background: url(img/calendar_2.png) no-repeat;' disabled><font style='color:blue'>"+intakeTimes+"</font></button></td>";
+			    			buttonIntakeTime="<td align='center'><button value="+data.medicine[i].id+" id='intakeTime"+i+"' type='button' class='btn btn-success custom' style='background: url(img/calendar_2.png) no-repeat;' disabled><font style='color:blue'>"+intakeTimes+"</font></button></td>";
 			    		}
 			    		
 			    		$("<tr><td><font>"+data.medicine[i].medicineName+"</font></td>"  
 			            + buttonIntakeTime
-			    		+ "<td align='center'><button value="+data.medicine[i].id+" id='medicineInformation"+i+"' type='button' class='btn btn-primary'><img class='btnClass' src='img/zoom_icon.png' width='40' heigth='40'/></button></td>").appendTo("table[id='example']");
+			    		+ "<td align='center'><button value="+data.medicine[i].id+" id='medicineInformation"+i+"' type='button' class='btn btn-success'><img class='btnClass' src='img/zoom_icon.png' width='40' heigth='40'/></button></td>").appendTo("table[id='example']");
 					    
 			    		$("#intakeTime"+i).unbind('click').click(function () {
 				    		init_value = ($(this).val());
@@ -643,6 +672,7 @@ $(document).ready(function() {
 			    		
 			    		$("#medicineInformation"+i).unbind('click').click(function () {
 				    		init_value = ($(this).val());
+				    		localStorage.setItem('medicineID', init_value);
 				    		localStorage.setItem('destination', "medicineInformation");
 				    		window.location = 'medicineInformation.html';
 			    		});
@@ -652,6 +682,37 @@ $(document).ready(function() {
 			});
 	};
 	
+	
+	function loadMedicInformation() {
+		  $.ajax({
+			    dataType: 'json',
+			    async:false,
+			    success: function(data) {
+			    	var intakeTimes = countIntakeTimeIDs(data.id);
+			    	var notificationTriggered = loadMedicineIntakeTimeInformation().notificationTriggered;
+			    	var notificationNotTriggered = loadMedicineIntakeTimeInformation().notificationNotTriggered;
+			    	var intakeTriggered = loadMedicineIntakeTimeInformation().intakeTriggered;
+			    	var intakeMissed = loadMedicineIntakeTimeInformation().intakeMissed;
+			    	var intakeNotTriggered = loadMedicineIntakeTimeInformation().intakeNotTriggered;
+			    	var pertinence = "";
+			    	
+			    	if(data.pertinence=="important"){
+			    		pertinence = "wichtig";
+			    	}
+			    	
+			    	 $('#tdNotificationTriggered').append(notificationTriggered);
+			    	 $('#tdIntakeTriggered').append(intakeTriggered);
+			    	 $('#tdIntakeMissed').append(intakeMissed);
+
+			    	 $('#tdMedicineName').append(data.medicineName);
+			    	 $('#tdDisease').append(data.disease);
+			    	 $('#tdStock').append(data.stock);
+			    	 $('#tdIntakeTimes').append(intakeTimes);
+			    	 $('#tdPertinence').append(pertinence);
+				   },
+			    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getMedicineInformationByMedicineID/'+localStorage.getItem("medicineID")
+			});
+	};
 	
 	/*
 	 * deleteMedicine.html functions
@@ -692,7 +753,48 @@ $(document).ready(function() {
 			});
 	};
 	
-	
+	function loadMedicineIntakeTimeInformation() {
+		  var objMedicineIntakeTimeInformation = new Object();
+		  $.ajax({
+			    dataType: 'json',
+			    async:false,
+			    success: function(data) {
+		    		var notificationTriggered = 0;
+		    		var notificationNotTriggered = 0;
+		    		   		
+		    		var intakeTriggered = 0;
+		    		var intakeMissed = 0;
+		    		var intakeNotTriggered = 0;
+			    	for(var i=0;i<data.intaketime.length;i++){
+
+			    		if(data.intaketime[i].notificationTriggered==true){
+			    			notificationTriggered = notificationTriggered +1;
+			    			
+			    			if(data.intaketime[i].intakeTriggered==true){
+			    				intakeTriggered = intakeTriggered +1;
+			    			} else {
+			    				intakeMissed = intakeMissed +1;
+			    			}
+			    		} else {
+			    			notificationNotTriggered = notificationNotTriggered +1;
+			    			intakeNotTriggered = intakeNotTriggered +1;
+			    		}
+			    	}
+					  objMedicineIntakeTimeInformation.notificationTriggered=notificationTriggered;
+					  objMedicineIntakeTimeInformation.notificationNotTriggered=notificationNotTriggered;
+					  objMedicineIntakeTimeInformation.intakeTriggered=intakeTriggered;
+					  objMedicineIntakeTimeInformation.intakeMissed=intakeMissed;
+					  objMedicineIntakeTimeInformation.intakeNotTriggered=intakeNotTriggered;
+				   },
+				    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getIntakeTimeByMedicineID/'+localStorage.getItem('medicineID')
+		});
+		  
+		
+		  
+		  return objMedicineIntakeTimeInformation;
+		  
+		  
+	};
 	
 	
 	

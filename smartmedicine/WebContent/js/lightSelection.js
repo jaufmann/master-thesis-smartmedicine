@@ -321,10 +321,8 @@ function setIcons(){
   	
 	$('#aBlue').empty();
 	$('#aBlue').append("<img id='aBlue'  onmouseover='blueHover(this)' onmouseout='blueNormal(this)'  class='myImage' src='img/blue_3.png' width='130' height='130'/>");
-  	
-
+  
 	$('#aGreen').empty();
 	$('#aGreen').append("<img id='aGreen' onmouseover='greenHover(this)' onmouseout='greenNormal(this)' class='myImage' src='img/green_3.png' width='130' height='125'/>");
-  	
  
 }

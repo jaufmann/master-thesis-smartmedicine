@@ -216,14 +216,15 @@ public class DBStatements {
 			try{					 
 				  conn = dbconnection.getConnection();
 				 
-		    	  String sqlProduct = " insert into medicine (note, medicineName, stock, disease)"
-					        + " values (?, ?, ?, ?)";
+		    	  String sqlProduct = " insert into medicine (note, medicineName, stock, disease, pertinence)"
+					        + " values (?, ?, ?, ?, ?)";
 		    	  
 			      pstmtProduct = conn.prepareStatement(sqlProduct);
 			      pstmtProduct.setString(1, medicine.getNote());
 				  pstmtProduct.setString(2, medicine.getMedicineName());
 				  pstmtProduct.setInt(3, medicine.getStock());
 				  pstmtProduct.setString (4, medicine.getDisease());
+				  pstmtProduct.setString (5, medicine.getPertinence());
 			      pstmtProduct.executeUpdate();
 			 } catch(Exception e){
 				 
@@ -375,7 +376,39 @@ public class DBStatements {
 	        }
 		
 	}
-}
+
+	public Medicine getMedicineInformationByMedicineID(int medicineID) throws ClassNotFoundException, SQLException, IOException {
+			Connection con = null;
+			Statement stmt = null;
+			ResultSet rs = null;
+			Medicine medicine = null;
+			String query = " SELECT medicineID, note, stock, medicineName, disease, pertinence "
+					+ 	   " FROM medicine "
+					+ 	   " WHERE medicineID = "+medicineID+""
+					+      " GROUP BY medicineID ";
+			
+			try{
+				con = dbconnection.getConnection();
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while(rs.next()){
+					medicine = new Medicine();
+					medicine.setId(rs.getInt("medicineID"));
+					medicine.setStock(rs.getInt("stock"));
+					medicine.setMedicineName(rs.getString("medicineName"));
+					medicine.setNote(rs.getString("note"));
+					medicine.setDisease(rs.getString("disease"));
+					medicine.setPertinence(rs.getString("pertinence"));
+				}
+			}finally{
+				if(rs != null) rs.close();
+				if(stmt != null)stmt.close();			
+				if(con !=null)con.close();
+			}	
+			return medicine;		
+		}
+	}
+
 	
 
 

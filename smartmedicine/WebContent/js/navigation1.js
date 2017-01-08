@@ -2,6 +2,10 @@
 
 $(document).ready(function() {			
 	
+	$("#btnMedicineOptionChoice").click(function(event){
+	      window.location = ' medicineOptionChoice.html';
+	});
+	
 	$('#btnAcoustical').click(function(){
 		window.location = 'acoustical.html';
 	})

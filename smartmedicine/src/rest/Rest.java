@@ -52,10 +52,8 @@ public class Rest {
 	  @Path("/getNotificationConfiguration")
 	  @Produces("application/json")
 	  public NotificationSetting getNotificationConfiguration() throws JSONException, ClassNotFoundException, SQLException, IOException, ParseException {
-	  	jsonObject = new JSONObject();
 	  	dbstatement = new DBStatements();
 	  	
-		jsonObject.put("notificationConfiguration", dbstatement.getNotificationConfiguration().toString());
 		return dbstatement.getNotificationConfiguration();
 	  }
 	  
@@ -80,6 +78,17 @@ public class Rest {
 	  	
 		jsonObject.put("intaketime", dbstatement.getIntakeTimeByIntakeTimeID(intakeTimeID));
 		return Response.status(200).entity(jsonObject.toString()).build();
+	  }
+	  
+	  
+	  @GET
+	  @Path("/getMedicineInformationByMedicineID/{medicineID}")
+	  @Produces("application/json")
+	  public Medicine getMedicineInformationByMedicineID(@PathParam("medicineID") int medicineID) throws JSONException, ClassNotFoundException, SQLException, IOException {
+
+	  	dbstatement = new DBStatements();
+
+		return  dbstatement.getMedicineInformationByMedicineID(medicineID);
 	  }
 	  
 	  
@@ -141,6 +150,7 @@ public class Rest {
 			medicine.setDisease(jsonMedicineObject.getString("disease"));
 			medicine.setMedicineName(jsonMedicineObject.getString("medicineName"));
 			medicine.setStock(jsonMedicineObject.getInt("stock"));
+			medicine.setPertinence(jsonMedicineObject.getString("pertinence"));
 			
 			dbstatement.createMedicine(medicine);
 		}	
