@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import classes.ContactPerson;
 import classes.IntakeTime;
 import classes.Medicine;
 import classes.NotificationSetting;
@@ -216,8 +217,8 @@ public class DBStatements {
 			try{					 
 				  conn = dbconnection.getConnection();
 				 
-		    	  String sqlProduct = " insert into medicine (note, medicineName, stock, disease, pertinence)"
-					        + " values (?, ?, ?, ?, ?)";
+		    	  String sqlProduct = " insert into medicine (note, medicineName, stock, disease, pertinence, savetystock)"
+					        + " values (?, ?, ?, ?, ?, ?)";
 		    	  
 			      pstmtProduct = conn.prepareStatement(sqlProduct);
 			      pstmtProduct.setString(1, medicine.getNote());
@@ -225,6 +226,7 @@ public class DBStatements {
 				  pstmtProduct.setInt(3, medicine.getStock());
 				  pstmtProduct.setString (4, medicine.getDisease());
 				  pstmtProduct.setString (5, medicine.getPertinence());
+				  pstmtProduct.setInt (6, medicine.getSavetyStock());
 			      pstmtProduct.executeUpdate();
 			 } catch(Exception e){
 				 
@@ -382,7 +384,7 @@ public class DBStatements {
 			Statement stmt = null;
 			ResultSet rs = null;
 			Medicine medicine = null;
-			String query = " SELECT medicineID, note, stock, medicineName, disease, pertinence "
+			String query = " SELECT * "
 					+ 	   " FROM medicine "
 					+ 	   " WHERE medicineID = "+medicineID+""
 					+      " GROUP BY medicineID ";
@@ -399,6 +401,7 @@ public class DBStatements {
 					medicine.setNote(rs.getString("note"));
 					medicine.setDisease(rs.getString("disease"));
 					medicine.setPertinence(rs.getString("pertinence"));
+					medicine.setSavetyStock(rs.getInt("savetystock"));
 				}
 			}finally{
 				if(rs != null) rs.close();
@@ -407,8 +410,66 @@ public class DBStatements {
 			}	
 			return medicine;		
 		}
-	}
 
 	
+	public void createContactPerson(ContactPerson contactPerson) {
+		Connection conn = null;
+		PreparedStatement pstmtContactPerson = null;
+		
+		try{					 
+			  conn = DBConnection.getConnection(); 
+			  String sqlContactPerson = " insert into contactperson (name, surname, email, sex)"
+				        + " values (?, ?, ?, ?)";
+	    	  
+	    	  pstmtContactPerson = conn.prepareStatement(sqlContactPerson);
+	    	  pstmtContactPerson.setString(1, contactPerson.getName());
+		      pstmtContactPerson.setString(2, contactPerson.getSurname());
+		      pstmtContactPerson.setString(3, contactPerson.getEmail());
+		      pstmtContactPerson.setString(4, contactPerson.getSex());
 
+		      pstmtContactPerson.executeUpdate();
+		 } catch(Exception e){
+			 
+		 }  finally {
+	            try {   
+	            	pstmtContactPerson.close();
+	                conn.close();
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	}
 
+	public ContactPerson getContactPerson() throws SQLException, ClassNotFoundException, IOException {
+		// TODO Auto-generated method stub
+		ContactPerson contactPerson = new ContactPerson();
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String sqlContactPerson = "SELECT * FROM contactperson WHERE contactPersonID = ?";
+		
+		
+		try{
+			con = DBConnection.getConnection();
+			pstmt = con.prepareStatement(sqlContactPerson);
+			pstmt.setInt(1, 1);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				contactPerson.setName(rs.getString("name"));
+				contactPerson.setSurname(rs.getString("surname"));
+				contactPerson.setEmail(rs.getString("email"));
+				contactPerson.setSex(rs.getString("sex"));
+			}
+		}finally{
+			if(rs != null) rs.close();
+			if(pstmt != null)pstmt.close();			
+			if(con !=null)con.close();
+		}		
+		
+		return contactPerson;
+	}
+	
+}

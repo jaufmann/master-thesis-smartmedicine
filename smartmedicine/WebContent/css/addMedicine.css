@@ -8,9 +8,9 @@ table.overview td {
 	width:200px;
 }
 
-img {
-	width:80px; 
-	height:80px;	
+img.headerNavigation {
+	width:60px; 
+	height:60px;	
 }
 
 img.interval {
@@ -18,6 +18,14 @@ img.interval {
 	height:30px;	
 }
 
+img.imgAttention{
+	width:20px; 
+	height:20px;
+}
+
+img.imgHeader {
+	width:400px;
+}
 img.transparent{
 	opacity:0.4;
 }

@@ -7,6 +7,7 @@ public class Medicine {
 	private String medicineName;
 	private String note;
 	private int stock;
+	private int savetyStock;
 	private String disease;
 	private String pertinence;
 	private ArrayList<Integer> listIntakeTimeIDs;
@@ -71,6 +72,14 @@ public class Medicine {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "pertinence";
+	}
+
+	public int getSavetyStock() {
+		return savetyStock;
+	}
+
+	public void setSavetyStock(int savetyStock) {
+		this.savetyStock = savetyStock;
 	}
 
 }

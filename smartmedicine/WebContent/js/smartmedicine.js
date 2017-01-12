@@ -14,12 +14,28 @@ $(document).ready(function() {
 	//addIntakeTime variables
 	var clickedInterval = "";
 	
+	var addMoreIntakeTime = false;
+	
+	var objCreateContactPerson = new Object();
+	
+	$('#btnYes').click(function(){
+		addMoreIntakeTime = true;
+	})
 	
 	$('#bootstrap-table').ready(function() {
+		
+		$('#divHeader').append("<img width='400' src='img/SmartMedicineLogo.png'><hr>");
+		
+		
 		var destination = localStorage.getItem("destination");
+		
 		if(destination=="deleteMedicine"){
 			loadDeleteMedicineInformationTable();
-		} else if(destination=="medicineInformation"){
+		} else if(destination=="psychologicalParent"){
+			
+			loadContactPersonInformation();
+		} 
+		else if(destination=="medicineInformation"){
 			loadMedicInformation();
 		} else if(destination=="editMedicine"){
 			loadEditMedicineInformationTable();
@@ -119,14 +135,22 @@ $(document).ready(function() {
 			
 		
 		} else if(destination=="addMedicine2"){
+			console.log(localStorage.getItem("stock"));
+			if(localStorage.getItem("stock")==null){
+				$('#txtSavetyStock').attr('disabled', true);
+			} else {
+				$('#txtSavetyStock').attr('disabled', false);
+			}
+			
 			$("#txtNote").val(localStorage.getItem("note"));
 			$("#txtStock").val(localStorage.getItem("stock"));
+			$("#txtSavetyStock").val(localStorage.getItem("savetyStock"));
 		} else if(destination=="addIntakeTime"){
 			
 			$('#tblHeaderOverview').empty();
-			$("<tr><td><img class='transparent' src='img/pills-blue.png'><font class='transparent'><b>Allgemein</b></font></h4></td>" +
-			  "<td><img class='transparent'  src='img/Information_icon.png'><font class='transparent'><b>Zeitpunkt</b></font></td>" +
-			  "<td><img   src='img/clock.png'><font><b>Zeitpunkt</b></font></h4></td></tr>").appendTo("table[id='tblHeaderOverview']");
+			$("<tr><td><img class='transparent headerNavigation' src='img/pills-blue.png'><font class='transparent'><b>Allgemein</b></font></h4></td>" +
+			  "<td><img class='transparent headerNavigation'  src='img/Information_icon.png'><font class='transparent'><b>Information</b></font></td>" +
+			  "<td><img class='headerNavigation'  src='img/clock.png'><font><b>Zeitpunkt</b></font></h4></td></tr>").appendTo("table[id='tblHeaderOverview']");
 			
 			
 			
@@ -233,7 +257,7 @@ $(document).ready(function() {
 			    		var intakeTimes = countIntakeTimeIDs(data.medicine[i].id);
 			    		var buttonIntakeTime ="";
 			    		if(intakeTimes>0){
-			    			buttonIntakeTime="<td align='center'><button width='40' heigth='40' value="+data.medicine[i].id+" id='intakeTime"+i+"' type='button' class='btn btn-primary custom' style='background: url(img/calendar_2.png) no-repeat;'><font style='color:blue'>"+intakeTimes+"</font></button></td>";
+			    			buttonIntakeTime="<td align='center'><button width='35' heigth='40' value="+data.medicine[i].id+" id='intakeTime"+i+"' type='button' class='btn btn-primary custom' style='background: url(img/calendar_2.png) no-repeat;'><font style='color:blue'>"+intakeTimes+"</font></button></td>";
 			    		} else {
 			    			buttonIntakeTime="<td align='center'><button value="+data.medicine[i].id+" id='intakeTime"+i+"' type='button' class='btn btn-primary custom' style='background: url(img/calendar_2.png) no-repeat;' disabled><font style='color:blue'>"+intakeTimes+"</font></button></td>";
 			    		}
@@ -268,7 +292,14 @@ $(document).ready(function() {
 	 */
 	
 	$('#btnSaveIntakeTime').click(function(){
-		var iteration = $('#txtIteration').val();
+		var iteration;
+		if($('#txtIteration').val()==""){
+			iteration = 1;
+		} else {
+			iteration = $('#txtIteration').val();
+		}
+		console.log("iteration"+iteration);
+		
 		var selectedDate = new Date($('#txtStartDate').val());
 		var selectedTime = $('#alarm').val();
 		var arrIntakeTimes = [];
@@ -315,7 +346,11 @@ $(document).ready(function() {
 		if(localStorage.getItem("destination")=="addIntakeTime" || localStorage.getItem("destination")=="addOnlyIntakeTime"){
 			if(localStorage.getItem("destination")=="addIntakeTime"){
 				objIntakeTime.medicineID=getLastMedicineID()+1;	
-				saveMedicineInformation();
+
+				console.log(addMoreIntakeTime);
+				if(addMoreIntakeTime==false){
+					saveMedicineInformation();
+				} 
 			} else {
 				objIntakeTime.medicineID=localStorage.getItem("medicineID");
 			}	
@@ -342,6 +377,8 @@ $(document).ready(function() {
 		objMedicineInformation.note = localStorage.getItem("note");
 		objMedicineInformation.stock = localStorage.getItem("stock");
 		objMedicineInformation.pertinence = localStorage.getItem("pertinence");
+		objMedicineInformation.savetyStock = localStorage.getItem("savetyStock");
+		
 
 	    jsonObjMedicineInformation = JSON.stringify(objMedicineInformation);
 		
@@ -386,6 +423,9 @@ $(document).ready(function() {
 		  })();
 	}
 	
+	
+
+	
 	function setDateInput(){
 		var now = new Date();
 		var day = ("0" + now.getDate()).slice(-2);
@@ -395,6 +435,31 @@ $(document).ready(function() {
 		$('#txtStartDate').val(today);
 	}
 	
+	$('#btnSaveContactPerson').click(function(){
+		objCreateContactPerson.name=$('#txtName').val();
+		objCreateContactPerson.surname=$('#txtSurname').val();
+		objCreateContactPerson.email=$('#txtEmail').val();
+		objCreateContactPerson.sex=localStorage.getItem("sex");
+		createContactPerson(objCreateContactPerson);
+	})
+	
+	function createContactPerson(x){
+		    $.ajax({
+		        type: 'POST',
+		        async:false,
+		        contentType: 'application/json',
+		        url: "http://localhost:8080/smartmedicine/rest/medicineinformation/createContactPerson",
+		        dataType: "json",
+		        data: JSON.stringify(x),
+		        success: function(data, textStatus, jqXHR){
+
+		        },
+		        error: function(jqXHR, textStatus, errorThrown){
+		            alert('Fehler beim Speichern der Kontaktpersondaten aufgetreten: ' + textStatus);
+		        }
+		    });
+	}
+
 	
 	$('#btnDaily').click(function(){
 		clickedInterval = "daily";
@@ -432,11 +497,55 @@ $(document).ready(function() {
 		createMedicineInformation();
 	})*/
 	
+	
 	$('#btnAddMedicineForwardFirst').click(function(){
-		localStorage.setItem("disease", $('#txtDisease').val());
-		localStorage.setItem("medicineName", $('#txtMedicineName').val());
-		localStorage.setItem("destination","addMedicine2");
-		$('#divContainer').load('addMedicine2.html');
+		var isMedicineNameCorrect = true;
+		var isDiseaseCorrect = true;
+		
+		if($('#txtMedicineName').val() != ""){
+			isMedicineNameCorrect = true;
+			$('#aMedicineName').empty();
+		} else {
+			isMedicineNameCorrect = false;
+			$('#aMedicineName').empty();
+			$('#aMedicineName').append("<img class='imgAttention'width='200' height='20' src='img/attention_icon.png'>");
+		}
+		
+		if($('#txtDisease').val() != ""){
+			isDiseaseCorrect = true;
+			$('#aDisease').empty();
+		} else {
+			isDiseaseCorrect = false;
+			$('#aDisease').empty();
+			$('#aDisease').append("<img class='imgAttention' src='img/attention_icon.png'>");
+		}
+		
+		if(isMedicineNameCorrect == true && isDiseaseCorrect == true){
+			localStorage.setItem("disease", $('#txtDisease').val());
+			localStorage.setItem("medicineName", $('#txtMedicineName').val());
+			localStorage.setItem("destination","addMedicine2");
+			window.location = 'addMedicine2.html';
+		}
+		/*if(medicineName!=""){
+			
+		/*} else {
+			console.log("affe");
+		}*/
+		
+	})
+	
+	
+	$('#btnFemale').click(function(){
+		localStorage.setItem("sex", "female");
+		document.getElementById("btnFemale").style.opacity = 1; 
+		document.getElementById("btnMale").style.opacity = 0.3; 
+	})
+	
+	$('#btnMale').click(function(){
+		localStorage.setItem("sex", "male");
+		
+		document.getElementById("btnFemale").style.opacity = 0.3; 
+		document.getElementById("btnMale").style.opacity = 1; 
 	})
 	
 	$('#btnImportant').click(function(){
@@ -452,11 +561,42 @@ $(document).ready(function() {
 		document.getElementById("btnNormal").style.opacity = 1; 
 	})
 	
+	$( "#txtStock" ).keyup(function() {
+			if($(this).val()!=""){
+				$('#txtSavetyStock').attr('disabled', false);
+			} else {
+				$('#txtSavetyStock').attr('disabled', true);
+			}
+	});
+	
 	$('#btnAddMedicineForwardSecond').click(function(){
-		localStorage.setItem("note", $("#txtNote").val());
-		localStorage.setItem("stock", $("#txtStock").val());
-		localStorage.setItem("destination", "addIntakeTime");
-		$('#divContainer').load('addIntakeTime.html');
+		
+		var isStockCorrect = true;
+		
+		
+		if($("#txtStock").val()!=""){
+			isStockCorrect = true;
+			$('#savetyStock').empty();
+		} else {
+			isStockCorrect = false;
+			$('#savetyStock').empty();
+			$('#savetyStock').append("<img class='imgAttention' src='img/attention_icon.png'>");
+		}
+		
+		if(isStockCorrect == true){
+			localStorage.setItem("note", $("#txtNote").val());
+			localStorage.setItem("stock", $("#txtStock").val());
+			if($("#txtSavetyStock").val()==""){
+				localStorage.setItem("savetyStock", 0);
+			} else {
+				localStorage.setItem("savetyStock", $("#txtSavetyStock").val());
+			}
+			
+			localStorage.setItem("destination", "addIntakeTime");
+			window.location = 'addIntakeTime.html';
+		}
+		
+		
 	})
 	
 	
@@ -480,6 +620,33 @@ $(document).ready(function() {
 	 * intakeTimeOverview.html functions
 	 */
 	
+	
+	function loadContactPersonInformation(){
+		 var isInformationAvailable = false;
+		 $.ajax({
+			    dataType: 'json',
+			    async:false,
+			    success: function(data) {
+			    		if(data.name != null){
+			    			$('#txtName').val(data.name);
+			    			$('#txtSurname').val(data.surname);
+			    			$('#txtEmail').val(data.email);
+			    			
+			    			if(data.sex=="male"){
+			    				$('#btnMale').click();
+			    			} else {
+			    				$('#btnFemale').click();
+			    			}
+			    			
+			    			isInformationAvailable = true;
+			    		} else {
+			    			$('#btnMale').click();
+			    		}
+				   },
+			    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getContactPerson'
+		});
+		
+	}
 	function loadIntakeTimeOverviewTable() {
 		  $.ajax({
 			    dataType: 'json',
@@ -709,6 +876,9 @@ $(document).ready(function() {
 			    	 $('#tdStock').append(data.stock);
 			    	 $('#tdIntakeTimes').append(intakeTimes);
 			    	 $('#tdPertinence').append(pertinence);
+			    	 $('#tdSavetyStock').append(data.savetyStock);
+			    	 
+			    	 
 				   },
 			    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getMedicineInformationByMedicineID/'+localStorage.getItem("medicineID")
 			});

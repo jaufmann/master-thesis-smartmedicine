@@ -1,5 +1,6 @@
 package rest;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -22,11 +23,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import classes.ContactPerson;
 import classes.IntakeTime;
 import classes.Medicine;
 import classes.NotificationSetting;
@@ -48,13 +52,20 @@ public class Rest {
 		return Response.status(200).entity(jsonObject.toString()).build();
 	  }
 	  
-	  @GET
-	  @Path("/getNotificationConfiguration")
+	  @GET @Path("/getNotificationConfiguration") 
 	  @Produces("application/json")
 	  public NotificationSetting getNotificationConfiguration() throws JSONException, ClassNotFoundException, SQLException, IOException, ParseException {
 	  	dbstatement = new DBStatements();
 	  	
 		return dbstatement.getNotificationConfiguration();
+	  }
+	  
+	  @GET @Path("/getContactPerson") 
+	  @Produces("application/json")
+	  public ContactPerson getContactPerson() throws JSONException, ClassNotFoundException, SQLException, IOException, ParseException {
+	  	dbstatement = new DBStatements();
+	  	
+		return dbstatement.getContactPerson();
 	  }
 	  
 	  @GET
@@ -151,13 +162,14 @@ public class Rest {
 			medicine.setMedicineName(jsonMedicineObject.getString("medicineName"));
 			medicine.setStock(jsonMedicineObject.getInt("stock"));
 			medicine.setPertinence(jsonMedicineObject.getString("pertinence"));
+			medicine.setPertinence(jsonMedicineObject.getString("pertinence"));
+			medicine.setSavetyStock(jsonMedicineObject.getInt("savetyStock"));
 			
 			dbstatement.createMedicine(medicine);
 		}	
 	  }
 	 
-	  @POST
-	  @Path("/editIntakeTime")
+	  @POST @Path("/editIntakeTime")
 	  @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	  @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	  public void editIntakeTime(Object objIntakeTimeInformation) throws JSONException, ClassNotFoundException, SQLException, ParseException, IOException, org.codehaus.jettison.json.JSONException {
@@ -206,6 +218,23 @@ public class Rest {
 
   		dbstatement.createIntakeTimeInformation(intakeTime);
 	  }
+	  
+	  
+	  @POST
+	  @Path("/createContactPerson")
+	  @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	  @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	  public void createContactPerson(Object objCreateContactPerson) throws JsonGenerationException, JsonMappingException, IOException  {
+	  	dbstatement = new DBStatements();
+	  	ObjectMapper mapper = new ObjectMapper();
+	  	
+	  	String jsonInString = mapper.writeValueAsString(objCreateContactPerson);
+	  	ContactPerson contactPerson = mapper.readValue(jsonInString, ContactPerson.class);;
+	 
+  		dbstatement.createContactPerson(contactPerson);
+	  }
+	  
+	  
 	  
 	  @POST @Path("/saveAccousticalSettings")
 	  @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

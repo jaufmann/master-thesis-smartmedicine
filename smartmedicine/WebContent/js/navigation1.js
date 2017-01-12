@@ -2,6 +2,7 @@
 
 $(document).ready(function() {			
 	
+
 	$("#btnMedicineOptionChoice").click(function(event){
 	      window.location = ' medicineOptionChoice.html';
 	});
@@ -30,11 +31,11 @@ $(document).ready(function() {
 	})
 	
 	$("#btnAddMedicineForwardFirst").click(function(event){
-	    window.location = 'addMedicine2.html';
+	    //*window.location = 'addMedicine2.html';
 	});
 	
 	$("#btnAddMedicineForwardSecond").click(function(event){
-	    window.location = 'addIntakeTime.html';
+	    //window.location = 'addIntakeTime.html';
 	});
 	
 	/**
@@ -91,6 +92,15 @@ $(document).ready(function() {
  });
  
  
+ $("#btnPsychologicalParent").click(function(event){
+	 window.localStorage.clear(); 
+	 localStorage.setItem("destination", "psychologicalParent");
+	 window.location='psychologicalParent.html';
+ });
+ 
+ 
+ 
+
  
  /**
   *  Navigation links for manageMedicine.html
