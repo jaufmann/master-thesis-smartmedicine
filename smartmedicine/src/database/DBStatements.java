@@ -418,14 +418,19 @@ public class DBStatements {
 		
 		try{					 
 			  conn = DBConnection.getConnection(); 
-			  String sqlContactPerson = " insert into contactperson (name, surname, email, sex)"
-				        + " values (?, ?, ?, ?)";
+			  String sqlContactPerson = " insert into psychologicalparent (name, surname, email, sex, contactType, recieveNotification)"
+				        + " values (?, ?, ?, ?, ?, ?)";
 	    	  
+			  System.out.println(contactPerson.getEmail());
 	    	  pstmtContactPerson = conn.prepareStatement(sqlContactPerson);
 	    	  pstmtContactPerson.setString(1, contactPerson.getName());
 		      pstmtContactPerson.setString(2, contactPerson.getSurname());
 		      pstmtContactPerson.setString(3, contactPerson.getEmail());
 		      pstmtContactPerson.setString(4, contactPerson.getSex());
+		      pstmtContactPerson.setString(5, contactPerson.getContactType());
+		      pstmtContactPerson.setBoolean(6, contactPerson.isRecieveNotification());
+		      
+		      
 
 		      pstmtContactPerson.executeUpdate();
 		 } catch(Exception e){
@@ -440,28 +445,32 @@ public class DBStatements {
 	        }
 	}
 
-	public ContactPerson getContactPerson() throws SQLException, ClassNotFoundException, IOException {
+	public ArrayList<ContactPerson> getContactPerson() throws SQLException, ClassNotFoundException, IOException {
 		// TODO Auto-generated method stub
-		ContactPerson contactPerson = new ContactPerson();
+		ContactPerson contactPerson = null;
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		ArrayList<ContactPerson> listContactPerson = new ArrayList<ContactPerson>();
 		
-		String sqlContactPerson = "SELECT * FROM contactperson WHERE contactPersonID = ?";
+		String sqlContactPerson = "SELECT * FROM psychologicalparent";
 		
 		
 		try{
 			con = DBConnection.getConnection();
 			pstmt = con.prepareStatement(sqlContactPerson);
-			pstmt.setInt(1, 1);
+			
 			
 			rs = pstmt.executeQuery();
 			while(rs.next()){
+				contactPerson = new ContactPerson();
 				contactPerson.setName(rs.getString("name"));
 				contactPerson.setSurname(rs.getString("surname"));
 				contactPerson.setEmail(rs.getString("email"));
 				contactPerson.setSex(rs.getString("sex"));
+				contactPerson.setId(rs.getInt("psychologicalParentID"));
+				listContactPerson.add(contactPerson);
 			}
 		}finally{
 			if(rs != null) rs.close();
@@ -469,7 +478,97 @@ public class DBStatements {
 			if(con !=null)con.close();
 		}		
 		
-		return contactPerson;
+		return listContactPerson;
+	}
+
+	public void deletePsychologicalParent(int psychologicalParentID) {
+		Connection con = null;
+        Statement stmt = null;
+        try
+        {
+        	con = dbconnection.getConnection();
+             
+            stmt = con.createStatement();
+            stmt.execute("DELETE FROM psychologicalparent WHERE psychologicalParentID ="+psychologicalParentID);
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try {   
+                stmt.close();
+                con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+		
+	}
+
+	public ContactPerson getPsychologicalParentByPsychologicalParentID(int psychologicalParentID) throws ClassNotFoundException, SQLException, IOException {
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		ContactPerson contactPerson = new ContactPerson();
+		String query = " SELECT * "
+				+ 	   " FROM psychologicalparent "
+				+ 	   " WHERE psychologicalParentID = "+psychologicalParentID+"";
+		
+		try{
+			con = dbconnection.getConnection();
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			while(rs.next()){
+				contactPerson.setName(rs.getString("name"));
+				contactPerson.setSurname(rs.getString("surname"));
+				contactPerson.setEmail(rs.getString("email"));
+				contactPerson.setSex(rs.getString("sex"));
+				contactPerson.setId(rs.getInt("psychologicalParentID"));
+				contactPerson.setRecieveNotification(rs.getBoolean("recieveNotification"));
+				contactPerson.setContactType(rs.getString("contactType"));
+				
+				
+				
+			}
+		}finally{
+			if(rs != null) rs.close();
+			if(stmt != null)stmt.close();			
+			if(con !=null)con.close();
+		}	
+		return contactPerson;	
+	}
+
+	public void editPsychologicalParent(ContactPerson contactPerson) {
+		Connection conn = null;
+		PreparedStatement pstmtProduct = null;
+
+		try{					 
+			  conn = DBConnection.getConnection();
+			 
+			  
+	    	  String sqlProduct = " UPDATE psychologicalparent SET name = ?, surname = ?, email = ?, sex = ?, contactType = ?, recieveNotification = ? WHERE psychologicalParentID = ?";
+	    	  
+		      pstmtProduct = conn.prepareStatement(sqlProduct);
+		      pstmtProduct.setString(1, contactPerson.getName());
+		      pstmtProduct.setString(2, contactPerson.getSurname());
+		      pstmtProduct.setString(3, contactPerson.getEmail());
+		      pstmtProduct.setString(4, contactPerson.getSex());
+		      
+		      pstmtProduct.setString(5, contactPerson.getContactType());
+		      pstmtProduct.setBoolean(6, contactPerson.isRecieveNotification());
+		      pstmtProduct.setInt(7, contactPerson.getId());
+		    
+		      pstmtProduct.executeUpdate();
+		 } catch(Exception e){
+			 
+		 }  finally {
+	            try {   
+	            	pstmtProduct.close();
+	                conn.close();
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+		
 	}
 	
 }

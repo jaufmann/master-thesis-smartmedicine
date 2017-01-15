@@ -5,6 +5,9 @@ public class ContactPerson {
 	private String surname;
 	private String email;
 	private String sex;
+	private int id;
+	private String contactType;
+	private boolean recieveNotification;
 	
 	public String getName() {
 		return name;
@@ -29,5 +32,23 @@ public class ContactPerson {
 	}
 	public void setSex(String sex) {
 		this.sex = sex;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getContactType() {
+		return contactType;
+	}
+	public void setContactType(String contactType) {
+		this.contactType = contactType;
+	}
+	public boolean isRecieveNotification() {
+		return recieveNotification;
+	}
+	public void setRecieveNotification(boolean recieveNotification) {
+		this.recieveNotification = recieveNotification;
 	}
 }

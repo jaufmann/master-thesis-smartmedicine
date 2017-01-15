@@ -52,6 +52,8 @@ public class Rest {
 		return Response.status(200).entity(jsonObject.toString()).build();
 	  }
 	  
+	  
+	  
 	  @GET @Path("/getNotificationConfiguration") 
 	  @Produces("application/json")
 	  public NotificationSetting getNotificationConfiguration() throws JSONException, ClassNotFoundException, SQLException, IOException, ParseException {
@@ -62,10 +64,12 @@ public class Rest {
 	  
 	  @GET @Path("/getContactPerson") 
 	  @Produces("application/json")
-	  public ContactPerson getContactPerson() throws JSONException, ClassNotFoundException, SQLException, IOException, ParseException {
+	  public Response getContactPerson() throws JSONException, ClassNotFoundException, SQLException, IOException, ParseException {
 	  	dbstatement = new DBStatements();
+		jsonObject = new JSONObject();
 	  	
-		return dbstatement.getContactPerson();
+		jsonObject.put("psychologicalParent", dbstatement.getContactPerson());
+		return Response.status(200).entity(jsonObject.toString()).build();
 	  }
 	  
 	  @GET
@@ -77,6 +81,16 @@ public class Rest {
 	  	
 		jsonObject.put("intaketime", dbstatement.getIntakeTimeByMedicineID(medicineID));
 		return Response.status(200).entity(jsonObject.toString()).build();
+	  }
+	  
+	  @GET
+	  @Path("/getPsychologicalParentByPsychologicalParentID/{psychologicalParentID}")
+	  @Produces("application/json")
+	  public ContactPerson getPsychologicalParentByPsychologicalParentID(@PathParam("psychologicalParentID") int psychologicalParentID) throws JSONException, ClassNotFoundException, SQLException, IOException {
+	  	dbstatement = new DBStatements();
+	  	
+	  	System.out.println(psychologicalParentID);
+		return dbstatement.getPsychologicalParentByPsychologicalParentID(psychologicalParentID);
 	  }
 	  
 	  
@@ -117,6 +131,14 @@ public class Rest {
 	  }
 	  
 	  
+	  @DELETE @Path("/deletePsychologicalPerson/{psychologicalParentID}")
+	  @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	  public void deletePsychologicalPerson(@PathParam("psychologicalParentID") int psychologicalParentID) throws JSONException, SQLException {
+		    dbstatement = new DBStatements();
+			
+		    dbstatement.deletePsychologicalParent(psychologicalParentID);
+	  }
+	  
 	  @DELETE @Path("/deleteMedicineInformation/{medicineID}")
 	  @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	  public void deleteMedicineInformation(@PathParam("medicineID") int medicineID) throws JSONException, SQLException {
@@ -124,6 +146,7 @@ public class Rest {
 			
 		    dbstatement.deleteMedicineInformation(medicineID);
 	  }
+	  
 	  
 	  @DELETE @Path("/deleteIntakeTimeInformation/{intakeTimeID}")
 	  @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -189,6 +212,20 @@ public class Rest {
 		dbstatement.editIntakeTime(intakeTime);
 	  }
 	  
+	  @POST @Path("/editPsychologicalParent")
+	  @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	  @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	  public void editPsychologicalParent(Object objEditPsychologicalParent) throws JSONException, ClassNotFoundException, SQLException, ParseException, IOException, org.codehaus.jettison.json.JSONException {
+
+	    dbstatement = new DBStatements();
+		ObjectMapper mapper = new ObjectMapper();
+		  	
+		String jsonInString = mapper.writeValueAsString(objEditPsychologicalParent);
+		ContactPerson contactPerson = mapper.readValue(jsonInString, ContactPerson.class);
+
+		dbstatement.editPsychologicalParent(contactPerson);
+	  }
+	  
 	  
 	  
 	  
@@ -229,7 +266,7 @@ public class Rest {
 	  	ObjectMapper mapper = new ObjectMapper();
 	  	
 	  	String jsonInString = mapper.writeValueAsString(objCreateContactPerson);
-	  	ContactPerson contactPerson = mapper.readValue(jsonInString, ContactPerson.class);;
+	  	ContactPerson contactPerson = mapper.readValue(jsonInString, ContactPerson.class);
 	 
   		dbstatement.createContactPerson(contactPerson);
 	  }

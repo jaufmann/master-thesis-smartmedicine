@@ -32,9 +32,35 @@ $(document).ready(function() {
 		if(destination=="deleteMedicine"){
 			loadDeleteMedicineInformationTable();
 		} else if(destination=="psychologicalParent"){
+			loadDeletePsychologicalParent();
+		} else if(destination=="fromEditPsychologicalParent"){
+			loadEditPsychologicalParentInformation();
+		} else if(destination == "contactPersonOverview"){
 			
-			loadContactPersonInformation();
+			loadContactPersonOverviewTable();
 		} 
+		
+		else if (destination=="addPsychologicalParent"){
+			$("#btnImportant").trigger("click");
+			$("#btnMale").trigger("click");
+			$("#btnSendMailYes").trigger("click");
+			$("#btnContactTypePrivate").trigger("click");
+			
+			
+			
+		} else if(destination == "contactPersonInformation"){
+			loadContactPersonInformation();
+        	
+		}
+		
+		else if(destination=="editPsychologicalParent"){
+			
+			loadEditPsychologicalParent();
+		} else if(destination=="travel"){
+			setDateInput();
+			setTimeInput();
+		}
+
 		else if(destination=="medicineInformation"){
 			loadMedicInformation();
 		} else if(destination=="editMedicine"){
@@ -51,6 +77,7 @@ $(document).ready(function() {
 				window.location = 'medicineOverview.html';
 			})
 	 	} else if(destination=="addOnlyIntakeTimeOverview"){
+	 		
 	 		$('#tdBack').empty();
 			$("<button id='btnBackToAddIntakeTimeOverview' class='btn btn-primary'><font class='white'>zur&uuml;ck</font></button>").appendTo("td[id='tdBack']");
 			$('#btnBackToAddIntakeTimeOverview').click(function(){
@@ -71,6 +98,7 @@ $(document).ready(function() {
 	 	}
 		
 		else if(destination=="addOnlyIntakeTime"){
+			$("#btnNoInterval").trigger("click");
 			setDateInput();
 			setTimeInput();
 			$('#txtIteration').attr('disabled', true);
@@ -93,6 +121,7 @@ $(document).ready(function() {
 		} else if(destination=="intakeTimeOverview"){
 			loadDeleteIntakeTimeTable();
 		} else if(destination=="editIntakeItem"){
+			$("#btnNoInterval").trigger("click");
 			$('#txtIteration').attr('disabled', true);
 			var newObjIntakeTime = getIntakeTimeByIntakeTimeID(localStorage.getItem("intakeTimeID"));
 			var date = new Date();	
@@ -146,7 +175,7 @@ $(document).ready(function() {
 			$("#txtStock").val(localStorage.getItem("stock"));
 			$("#txtSavetyStock").val(localStorage.getItem("savetyStock"));
 		} else if(destination=="addIntakeTime"){
-			
+			$("#btnNoInterval").trigger("click");
 			$('#tblHeaderOverview').empty();
 			$("<tr><td><img class='transparent headerNavigation' src='img/pills-blue.png'><font class='transparent'><b>Allgemein</b></font></h4></td>" +
 			  "<td><img class='transparent headerNavigation'  src='img/Information_icon.png'><font class='transparent'><b>Information</b></font></td>" +
@@ -188,7 +217,8 @@ $(document).ready(function() {
 		if(destination=="deleteMedicine" || destination=="editMedicine" || destination=="medicineOverview"
 			|| destination=="deleteIntakeTime" || destination=="editIntakeTimeOverview" || destination=="intakeTimeOverview"
 			|| destination =="addIntakeTimeOverview" || destination=="addOnlyIntakeTimeOverview" || destination=="medicineIntakeTimeOverview"
-			|| destination == "medicineOverviewIntakeTime"){
+			|| destination == "medicineOverviewIntakeTime" || destination=="psychologicalParent" || destination=="editPsychologicalParent"
+			|| destination == "contactPersonOverview"){
 	
 		    $('#example').DataTable( {	
 		    	
@@ -421,6 +451,19 @@ $(document).ready(function() {
 		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		  })();
+		  
+		  
+			$( "#alarm1" ).timeDropper();
+			 var _gaq = _gaq || [];
+			  _gaq.push(['_setAccount', 'UA-36251023-1']);
+			  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+			  _gaq.push(['_trackPageview']);
+			
+			  (function() {
+			    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			  })();
 	}
 	
 	
@@ -436,11 +479,26 @@ $(document).ready(function() {
 	}
 	
 	$('#btnSaveContactPerson').click(function(){
-		objCreateContactPerson.name=$('#txtName').val();
-		objCreateContactPerson.surname=$('#txtSurname').val();
-		objCreateContactPerson.email=$('#txtEmail').val();
-		objCreateContactPerson.sex=localStorage.getItem("sex");
-		createContactPerson(objCreateContactPerson);
+		if(localStorage.getItem("psychologicalParentID")!=null){
+			objCreateContactPerson.name=$('#txtName').val();
+			objCreateContactPerson.surname=$('#txtSurname').val();
+			objCreateContactPerson.email=$('#txtEmail').val();
+			objCreateContactPerson.sex=localStorage.getItem("sex");
+			objCreateContactPerson.id = localStorage.getItem("psychologicalParentID");
+			objCreateContactPerson.contactType = localStorage.getItem("contactType");
+			objCreateContactPerson.recieveNotification = localStorage.getItem("recieveNotification");
+			
+			editPsychologicalParent();
+		} else {
+			objCreateContactPerson.name=$('#txtName').val();
+			objCreateContactPerson.surname=$('#txtSurname').val();
+			objCreateContactPerson.email=$('#txtEmail').val();
+			objCreateContactPerson.sex=localStorage.getItem("sex");
+			objCreateContactPerson.contactType = localStorage.getItem("contactType");
+			objCreateContactPerson.recieveNotification = localStorage.getItem("recieveNotification");
+			createContactPerson(objCreateContactPerson);
+		}
+		
 	})
 	
 	function createContactPerson(x){
@@ -452,7 +510,10 @@ $(document).ready(function() {
 		        dataType: "json",
 		        data: JSON.stringify(x),
 		        success: function(data, textStatus, jqXHR){
-
+		        	$('#btnShowPsychologicalParentSaveModal').trigger("click");
+		        	setTimeout(function () {
+		        		$('#btnCloseModalPsychologicalParent').trigger("click");
+		            }, 2000);
 		        },
 		        error: function(jqXHR, textStatus, errorThrown){
 		            alert('Fehler beim Speichern der Kontaktpersondaten aufgetreten: ' + textStatus);
@@ -460,25 +521,46 @@ $(document).ready(function() {
 		    });
 	}
 
+
+	$('#btnCloseModalPsychologicalParent').click(function(){
+		window.location = "managePsychologicalParent.html";
+	})
 	
 	$('#btnDaily').click(function(){
 		clickedInterval = "daily";
 		$('#txtIteration').attr('disabled', false);
+		document.getElementById("btnDaily").style.opacity = 1; 
+		document.getElementById("btnWeekly").style.opacity = 0.3; 
+		document.getElementById("btnMonthly").style.opacity = 0.3; 
+		document.getElementById("btnNoInterval").style.opacity = 0.3; 
 	})
 	
 	$('#btnWeekly').click(function(){
 		clickedInterval = "weekly";
 		$('#txtIteration').attr('disabled', false);
+		document.getElementById("btnWeekly").style.opacity = 1; 
+		document.getElementById("btnDaily").style.opacity = 0.3; 
+		document.getElementById("btnMonthly").style.opacity = 0.3; 
+		document.getElementById("btnNoInterval").style.opacity = 0.3; 
 	})
 	
 	$('#btnMonthly').click(function(){
 		clickedInterval = "monthly";
 		$('#txtIteration').attr('disabled', false);
+		document.getElementById("btnMonthly").style.opacity = 1; 
+		document.getElementById("btnDaily").style.opacity = 0.3; 
+		document.getElementById("btnWeekly").style.opacity = 0.3; 
+		document.getElementById("btnNoInterval").style.opacity = 0.3; 
+		
 	})
 	
 	$('#btnNoInterval').click(function(){
 		clickedInterval = "none";
 		$('#txtIteration').attr('disabled', true);
+		document.getElementById("btnNoInterval").style.opacity = 1; 
+		document.getElementById("btnDaily").style.opacity = 0.3; 
+		document.getElementById("btnWeekly").style.opacity = 0.3; 
+		document.getElementById("btnMonthly").style.opacity = 0.3; 
 	})
 	
 	/**
@@ -534,6 +616,38 @@ $(document).ready(function() {
 		
 	})
 	
+	$('#btnContactTypePrivate').click(function(){
+		localStorage.setItem("contactType", "private");
+		document.getElementById("btnContactTypePrivate").style.opacity = 1; 
+		document.getElementById("btnContactTypeDoctor").style.opacity = 0.3; 
+		document.getElementById("btnContactTypeMisc").style.opacity = 0.3; 
+	})
+	
+	$('#btnContactTypeDoctor').click(function(){
+		localStorage.setItem("contactType", "doctor");
+		document.getElementById("btnContactTypeDoctor").style.opacity = 1; 
+		document.getElementById("btnContactTypePrivate").style.opacity = 0.3; 
+		document.getElementById("btnContactTypeMisc").style.opacity = 0.3; 
+	})
+	
+	$('#btnContactTypeMisc').click(function(){
+		localStorage.setItem("contactType", "misc");
+		document.getElementById("btnContactTypeMisc").style.opacity = 1; 
+		document.getElementById("btnContactTypePrivate").style.opacity = 0.3; 
+		document.getElementById("btnContactTypeDoctor").style.opacity = 0.3; 
+	})
+	
+	$('#btnSendMailYes').click(function(){
+		localStorage.setItem("recieveNotification", true);
+		document.getElementById("btnSendMailYes").style.opacity = 1; 
+		document.getElementById("btnSendMailNo").style.opacity = 0.3; 
+	})
+	
+	$('#btnSendMailNo').click(function(){
+		localStorage.setItem("recieveNotification", false);
+		document.getElementById("btnSendMailNo").style.opacity = 1; 
+		document.getElementById("btnSendMailYes").style.opacity = 0.3; 
+	})
 	
 	$('#btnFemale').click(function(){
 		localStorage.setItem("sex", "female");
@@ -621,7 +735,7 @@ $(document).ready(function() {
 	 */
 	
 	
-	function loadContactPersonInformation(){
+	/*function loadContactPersonInformation(){
 		 var isInformationAvailable = false;
 		 $.ajax({
 			    dataType: 'json',
@@ -646,7 +760,8 @@ $(document).ready(function() {
 			    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getContactPerson'
 		});
 		
-	}
+	}*/
+	
 	function loadIntakeTimeOverviewTable() {
 		  $.ajax({
 			    dataType: 'json',
@@ -707,6 +822,25 @@ $(document).ready(function() {
 	        success: function(data, textStatus, jqXHR){
 	        	localStorage.setItem('destination', "editIntakeTimeOverview");
 	        	window.location = 'editIntakeTimeOverview.html';
+	        },
+	        error: function(jqXHR, textStatus, errorThrown){
+	            alert('addWine error: ' + textStatus);
+	        }
+	    });
+	}
+	
+	function editPsychologicalParent() {
+	    $.ajax({
+	        type: 'POST',
+	        contentType: 'application/json',
+	        url: "http://localhost:8080/smartmedicine/rest/medicineinformation/editPsychologicalParent",
+	        dataType: "json",
+	        data: JSON.stringify(objCreateContactPerson),
+	        success: function(data, textStatus, jqXHR){
+	        	$('#btnShowPsychologicalParentSaveModal').trigger("click");
+	        	setTimeout(function () {
+	        		$('#btnCloseModalPsychologicalParent').trigger("click");
+	            }, 2000);
 	        },
 	        error: function(jqXHR, textStatus, errorThrown){
 	            alert('addWine error: ' + textStatus);
@@ -850,6 +984,34 @@ $(document).ready(function() {
 	};
 	
 	
+	
+	function loadContactPersonOverviewTable() {
+		  $.ajax({
+			    dataType: 'json',
+			    async:false,
+			    success: function(data) {
+			    	for(var i=0;i<data.psychologicalParent.length;i++){
+			    		
+			    		$("<tr><td><font>"+data.psychologicalParent[i].surname+"</font></td>" +
+			    		  "<td><font>"+data.psychologicalParent[i].name+"</font></td>" +
+			    		  "<td align='center'><button value="+data.psychologicalParent[i].id+" id='contactPersonInformation"+i+"' " +
+			    		  "type='button' class='btn btn-success'><img class='btnClass' src='img/zoom_icon.png' width='40' heigth='40'/></button></td></tr>").appendTo("table[id='example']");
+			    		
+			    		$("#contactPersonInformation"+i).unbind('click').click(function () {
+				    		init_value = ($(this).val());
+				    		localStorage.setItem("psychologicalParentID", init_value);
+				    		localStorage.setItem("destination", "contactPersonInformation");
+				    		window.location = "contactPersonInformation.html";
+				    		
+			    		});
+			    	}	
+			    	
+		    	
+				   },
+			    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getContactPerson'
+			});
+	};
+	
 	function loadMedicInformation() {
 		  $.ajax({
 			    dataType: 'json',
@@ -922,6 +1084,142 @@ $(document).ready(function() {
 			    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getMedicineInformation'
 			});
 	};
+	
+	
+	
+	function loadDeletePsychologicalParent() {
+		  $.ajax({
+			    dataType: 'json',
+			    async:false,
+			    success: function(data) {
+			    	
+			    	for(var i=0;i<data.psychologicalParent.length;i++){
+			    	  console.log(data.psychologicalParent[i].id);
+			    		$("<tr><td><font>"+data.psychologicalParent[i].surname+"</font></td>"  
+			    		+ "<td><font>"+data.psychologicalParent[i].name+"</font></td>" 
+			    		+ "<td align='center'><button value="+data.psychologicalParent[i].id+" id='deletePsychologicalParent"+i+"' type='button' class='btn btn-danger'>" +
+			    		"<img class='btnClass' src='img/delete_icon.png' width='40' heigth='40'/></button></td></tr>").appendTo("table[id='example']");
+			    		
+			    		$("#deletePsychologicalParent"+i).unbind('click').click(function () {
+			    			init_value = ($(this).val());
+			    			deletePsychologicalPerson(init_value);
+				    		
+				    		window.location ='deleteContactPerson.html';
+			    		});
+			    		
+
+			    	}    
+				   },
+			    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getContactPerson'
+			});
+	};
+	
+	
+	function loadEditPsychologicalParent() {
+		  $.ajax({
+			    dataType: 'json',
+			    async:false,
+			    success: function(data) {
+			    	
+			    	for(var i=0;i<data.psychologicalParent.length;i++){
+			    	  console.log(data.psychologicalParent[i].id);
+			    		$("<tr><td><font>"+data.psychologicalParent[i].surname+"</font></td>"  
+			    		+ "<td><font>"+data.psychologicalParent[i].name+"</font></td>" 
+			    		+ "<td align='center'><button value="+data.psychologicalParent[i].id+" id='editPsychologicalParent"+i+"' type='button' class='btn btn-warning'>" +
+			    		"<img class='btnClass' src='img/edit_icon.png' width='40' heigth='40'/></button></td></tr>").appendTo("table[id='example']");
+			    		
+			    		$("#editPsychologicalParent"+i).unbind('click').click(function () {
+			    			init_value = ($(this).val());
+			    			
+			    			localStorage.setItem("psychologicalParentID",init_value);
+			    			localStorage.setItem("destination", "fromEditPsychologicalParent")
+			    			window.location = "psychologicalParent.html"
+				    		
+			    		});
+			    		
+
+			    	}    
+				   },
+			    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getContactPerson'
+			});
+	};
+	
+	function loadEditPsychologicalParentInformation() {
+		  $.ajax({
+			    dataType: 'json',
+			    async:false,
+			    success: function(data) {
+			    		$("#txtName").val(data.name);
+			    		$("#txtSurname").val(data.surname);
+			    		$("#txtEmail").val(data.email);
+			    		
+			    		if(data.sex=="male"){
+			    			$('#btnMale').trigger("click");
+			    		} else {
+			    			$('#btnFemale').trigger("click");
+			    		}
+			    		
+			    		if(data.recieveNotification == true){
+			    			$("#btnSendMailYes").trigger("click");
+			    		} else {
+			    			$("#btnSendMailNo").trigger("click");
+			    		}
+			    		
+			    		if(data.contactType == "private"){
+			    			$("#btnContactTypePrivate").trigger("click"); 
+			    		} else if(data.contactType == "doctor"){
+			    			$("#btnContactTypeDoctor").trigger("click"); 
+			    		} else {
+			    			$("#btnContactTypeMisc").trigger("click"); 
+			    		}
+			    		
+				   },
+			    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getPsychologicalParentByPsychologicalParentID/'+localStorage.getItem("psychologicalParentID")
+			});
+	};
+	
+
+	function loadContactPersonInformation() {
+		  $.ajax({
+			    dataType: 'json',
+			    async:false,
+			    success: function(data) {
+			    	var contactType = data.contactType;
+			    	
+			    	$('#tdSurname').append("<font>"+data.surname+"</font>");
+			    	$('#tdName').append("<font>"+data.name+"</font>");
+			    	if(data.sex == "male"){
+			    		$('#tdSex').append("<font>Herr</font>");
+			    	} else {
+			    		$('#tdSex').append("<font>Frau</font>");
+			    	}
+			    	
+			    	if(contactType == "doctor"){
+			    		$("#tdContactType").append("<button type='button' class='btn btn-primary'><img src='img/art_arzt_logo.png'></button>");
+			    	} else if(contactType=="misc"){
+			    		$("#tdContactType").append("<button type='button' class='btn btn-primary'><img src='img/art_sonstige_logo.png'></button>");
+			    	} else {
+			    		$("#tdContactType").append("<button type='button' class='btn btn-primary'><img src='img/art_privat_logo.png'></button>");
+			    	}
+			    	
+			    	
+			    	
+			    	
+			    	
+			    	
+			    	$("#tdEmail").append("<font>"+data.email+"</font>");
+			    	if(data.recieveNotification == true){
+			    		$("#tdRecieveNotification").append("<font>Wenn eine wichtige Einnahme vergessen wurde, dann wird eine E-Mail gesendet</font>");
+			    	} else {
+			    		$("#tdRecieveNotification").append("<font>Wenn eine wichtige Einnahme vergessen wurde, dann wird keine E-Mail gesendet</font>");
+			    	}
+			    	
+			    		
+				   },
+			    url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/getPsychologicalParentByPsychologicalParentID/'+localStorage.getItem("psychologicalParentID")
+			});
+	};
+
 	
 	function loadMedicineIntakeTimeInformation() {
 		  var objMedicineIntakeTimeInformation = new Object();
@@ -1007,6 +1305,21 @@ $(document).ready(function() {
 	};
 	
 	
+	function deletePsychologicalPerson(psychologicalParentID) {
+		$.ajax({
+	        type: 'DELETE',
+	        async:false,
+	        contentType: 'application/json',
+	        url: 'http://localhost:8080/smartmedicine/rest/medicineinformation/deletePsychologicalPerson/'+psychologicalParentID,
+	        dataType: "json",
+	        success: function(data, textStatus, jqXHR){
+	            
+	        },
+	        error: function(jqXHR, textStatus, errorThrown){
+	            alert('Medicine information could be deleted');
+	        }
+	    });
+	}
 	
 	function deleteMedicineInformation(medicineID) {
 		$.ajax({

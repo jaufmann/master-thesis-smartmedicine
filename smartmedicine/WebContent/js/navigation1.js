@@ -7,6 +7,33 @@ $(document).ready(function() {
 	      window.location = ' medicineOptionChoice.html';
 	});
 	
+	$("#btnTravel").click(function(event){
+		 localStorage.setItem("destination","travel");
+	      window.location = ' travel.html';
+	});
+	
+	$("#btnManagePsychologicalParent").click(function(event){
+	      window.location = 'managePsychologicalParent.html';
+	});
+	
+	$("#btnDeleteContactPerson").click(function(event){
+		  localStorage.setItem("destination", "psychologicalParent")
+	      window.location = 'deleteContactPerson.html';
+	});
+	
+	$("#btnEditPsychologicalParent").click(function(event){
+		  localStorage.setItem("destination", "editPsychologicalParent")
+	      window.location = 'editPsychologicalParent.html';
+	});
+	
+
+	
+	$("#btnContactPersonOverview").click(function(event){
+		  localStorage.setItem("destination", "contactPersonOverview")
+	      window.location = 'contactPersonOverview.html';
+	});
+
+	
 	$('#btnAcoustical').click(function(){
 		window.location = 'acoustical.html';
 	})
@@ -94,7 +121,7 @@ $(document).ready(function() {
  
  $("#btnPsychologicalParent").click(function(event){
 	 window.localStorage.clear(); 
-	 localStorage.setItem("destination", "psychologicalParent");
+	 localStorage.setItem("destination", "addPsychologicalParent");
 	 window.location='psychologicalParent.html';
  });
  
