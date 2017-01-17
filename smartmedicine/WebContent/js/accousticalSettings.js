@@ -199,7 +199,17 @@
 				    		}
 				    	} else {
 				    		$("#divNotificationSoundSelection").hide();	
-				    		$('#toggle-event').bootstrapToggle('off')
+				    		$('#toggle-event').bootstrapToggle('off');
+				    		if(data.notificationSoundName=="notification1"){
+				    			$('#aNotification1').click();
+				    		} else if(data.notificationSoundName=="notification2"){
+				    			$('#aNotification2').click();
+				    			
+				    		} else if(data.notificationSoundName=="notification3"){
+				    			$('#aNotification3').click();
+				    			
+				    		}
+				    		
 				    	}
 				    	
 					 },

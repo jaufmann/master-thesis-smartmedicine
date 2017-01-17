@@ -11,6 +11,7 @@ public class IntakeTime {
 	private String intakeTime;
 	private boolean isNotificationTriggered;
 	private boolean isIntakeTriggered;
+	private int pillQuantity;
 	
 	public int getIntakeTimeID() {
 		return intakeTimeID;
@@ -54,6 +55,12 @@ public class IntakeTime {
 	}
 	public void setNotificationTriggered(boolean isNotificationTriggered) {
 		this.isNotificationTriggered = isNotificationTriggered;
+	}
+	public int getPillQuantity() {
+		return pillQuantity;
+	}
+	public void setPillQuantity(int pillQuantity) {
+		this.pillQuantity = pillQuantity;
 	}
 
 }

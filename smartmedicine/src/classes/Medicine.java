@@ -11,6 +11,7 @@ public class Medicine {
 	private String disease;
 	private String pertinence;
 	private ArrayList<Integer> listIntakeTimeIDs;
+	private String contactType;
 
 	public int getId() {
 		return medicineID;
@@ -80,6 +81,14 @@ public class Medicine {
 
 	public void setSavetyStock(int savetyStock) {
 		this.savetyStock = savetyStock;
+	}
+
+	public String getContactType() {
+		return contactType;
+	}
+
+	public void setContactType(String contactType) {
+		this.contactType = contactType;
 	}
 
 }

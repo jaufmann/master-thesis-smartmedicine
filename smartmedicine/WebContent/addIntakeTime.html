@@ -21,9 +21,10 @@
     <script type = "text/javascript" src="js/navigation1.js" /></script>
 </head>
 <body>
+<!-- 
 <div align="center">
 <img width="400" src="img/SmartMedicineLogo.png"><hr>
-</div>
+</div>-->
     <!-- overview of the current status -->
 	<table class="overview" id="tblHeaderOverview">
 	<tr>
@@ -31,18 +32,24 @@
 	</tr>
 	</table>
 	    <hr>
-  	<br>
+
 
 <div class="divContainer" id="divContainer"> 
-    <!-- input fields -->         
+    <!-- input fields --> 
+            
     <table>
+    <tr>
+    	<td colspan="2"><font>Medikamentenanzahl:</font><input class='form-control' type="number" id="txtPillQuantity" > </td>
+    </tr>
+        <tr>
+    	<td>&nbsp;</td>
+    </tr>
     <tr>
     	<td width="100%"><font>Startdatum:</font><input class='form-control' type="date" id="txtStartDate" > </td>
     	<td width="100%"><font>Startzeitpunkt:</font> <input type="text" class='form-control' id="alarm" /></td>
     </tr>
     </table>
 
-    <br>
     <br>
     <table width="100%">
     <tr>

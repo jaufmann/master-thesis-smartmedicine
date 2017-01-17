@@ -96,6 +96,7 @@ public class DBStatements {
 				intaketime.setIntakeTime(rs.getString("intakeTime"));
 				intaketime.setIntakeTriggered(rs.getBoolean("intakeStatus"));
 				intaketime.setNotificationTriggered(rs.getBoolean("NotificationStatus"));
+				intaketime.setPillQuantity(rs.getInt("pillQuantity"));
 				listIntaketimes.add(intaketime);
 			}
 		}finally{
@@ -213,12 +214,12 @@ public class DBStatements {
 	public void createMedicine(Medicine medicine) throws IOException {
 		 	Connection conn = null;
 			PreparedStatement pstmtProduct = null;
-			 
+			System.out.println(medicine.getMedicineName());
 			try{					 
 				  conn = dbconnection.getConnection();
 				 
-		    	  String sqlProduct = " insert into medicine (note, medicineName, stock, disease, pertinence, savetystock)"
-					        + " values (?, ?, ?, ?, ?, ?)";
+		    	  String sqlProduct = " insert into medicine (note, medicineName, stock, disease, pertinence, savetystock, contactPerson)"
+					        + " values (?, ?, ?, ?, ?, ?, ?)";
 		    	  
 			      pstmtProduct = conn.prepareStatement(sqlProduct);
 			      pstmtProduct.setString(1, medicine.getNote());
@@ -227,6 +228,7 @@ public class DBStatements {
 				  pstmtProduct.setString (4, medicine.getDisease());
 				  pstmtProduct.setString (5, medicine.getPertinence());
 				  pstmtProduct.setInt (6, medicine.getSavetyStock());
+				  pstmtProduct.setString (7, medicine.getContactType());
 			      pstmtProduct.executeUpdate();
 			 } catch(Exception e){
 				 
@@ -240,21 +242,22 @@ public class DBStatements {
 		        }
 		 }
 
-	public void createIntakeTimeInformation(IntakeTime intakeTime) {
+	public void createIntakeTimeInformation(ArrayList<IntakeTime> ListIntakeTime, int medicineID) {
 	 	Connection conn = null;
 		PreparedStatement pstmtProduct = null;
 		 
 		try{					 
 			  conn = dbconnection.getConnection();
 			 
-	    	  String sqlProduct = " insert into intaketime (intakeTime, medicineID, NotificationStatus, intakeStatus)"
-				        + " values (?, ?, ?, ?)";
-		      for (Integer outputIntakeTime: intakeTime.getListIntakteTimeUnix()) {
+	    	  String sqlProduct = " insert into intaketime (intakeTime, medicineID, NotificationStatus, intakeStatus, pillQuantity)"
+				        + " values (?, ?, ?, ?, ?)";
+		      for (IntakeTime outputIntakeTime: ListIntakeTime) {
 			      pstmtProduct = conn.prepareStatement(sqlProduct);
-			      pstmtProduct.setInt(1, outputIntakeTime);
-				  pstmtProduct.setInt(2, intakeTime.getMedicineID());
+			      pstmtProduct.setInt(1, outputIntakeTime.getIntakeTimeUnix());
+				  pstmtProduct.setInt(2, medicineID);
 				  pstmtProduct.setInt(3, 0);
 				  pstmtProduct.setInt(4, 0);
+				  pstmtProduct.setInt(5, outputIntakeTime.getPillQuantity());
 			      pstmtProduct.addBatch();
 			      pstmtProduct.executeBatch();
 		    	}

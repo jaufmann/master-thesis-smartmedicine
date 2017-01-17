@@ -24,7 +24,7 @@ $(document).ready(function() {
 	
 	$('#bootstrap-table').ready(function() {
 		
-		$('#divHeader').append("<img width='400' src='img/SmartMedicineLogo.png'><hr>");
+		//$('#divHeader').append("<img width='400' src='img/SmartMedicineLogo.png'><hr>");
 		
 		
 		var destination = localStorage.getItem("destination");
@@ -150,16 +150,28 @@ $(document).ready(function() {
 		} 
 		
 		else if(destination=="addMedicine"){
+			$('#divContactPerson').hide();
 			$('#txtMedicineName').val(localStorage.getItem("medicineName"));
 			$('#txtDisease').val(localStorage.getItem("disease"));
 			
 			if(localStorage.getItem("pertinence")==null){
 				$('#btnNormal').click();
+				$('#btnContactTypePrivate').click();
 			} else if(localStorage.getItem("pertinence")=="important"){
 				$('#btnImportant').click();
+				var contactType = localStorage.getItem("contactType");
+				console.log(contactType);
+				if(contactType=="doctor"){
+					$('#btnContactTypeDoctor ').click();
+				} else if(contactType=="private"){
+					$('#btnContactTypePrivate').click();
+				} else {
+					$('#btnContactTypeMisc').click();
+				}
 			} else {
 				$('#btnNormal').click();
 			}
+			
 			
 			
 		
@@ -177,9 +189,9 @@ $(document).ready(function() {
 		} else if(destination=="addIntakeTime"){
 			$("#btnNoInterval").trigger("click");
 			$('#tblHeaderOverview').empty();
-			$("<tr><td><img class='transparent headerNavigation' src='img/pills-blue.png'><font class='transparent'><b>Allgemein</b></font></h4></td>" +
-			  "<td><img class='transparent headerNavigation'  src='img/Information_icon.png'><font class='transparent'><b>Information</b></font></td>" +
-			  "<td><img class='headerNavigation'  src='img/clock.png'><font><b>Zeitpunkt</b></font></h4></td></tr>").appendTo("table[id='tblHeaderOverview']");
+			$("<tr><td><img class='transparent headerNavigation' src='img/pills-blue.png'><font style='color:2875bd' class='transparent'><b>Allgemein</b></font></h4></td>" +
+			  "<td><img class='transparent headerNavigation'  src='img/Information_icon.png'><font style='color:2875bd' class='transparent'><b>Info</b></font></td>" +
+			  "<td><img class='headerNavigation'  src='img/clock.png'><font style='color:2875bd'><b>Zeitpunkt</b></font></h4></td></tr>").appendTo("table[id='tblHeaderOverview']");
 			
 			
 			
@@ -263,12 +275,13 @@ $(document).ready(function() {
 			    				intakeStatus = "Einnahme verpasset"
 			    			}
 			    		} else {
-			    			notificationTrigegered = "Ausstehend";
-			    			intakeStatus = "Ausstehend"
+			    			notificationTrigegered = "Aussteffhend";
+			    			intakeStatus = "Ausstaehend"
 			    		}
 			    		
 			    		$("<tr><td><font>"+date+"</font></td>" 
 			    		+ "<td><font>"+time+"</font></td>" 
+			    		+ "<td><font>"+data.intaketime[i].pillQuantity+"</font></td>" 
 			    		+ "<td><font>"+notificationTrigegered+"</font></td>" 
 			    		+ "<td><font>"+intakeStatus+"</font></td></tr>").appendTo("table[id='example']");
 					    
@@ -332,10 +345,12 @@ $(document).ready(function() {
 		
 		var selectedDate = new Date($('#txtStartDate').val());
 		var selectedTime = $('#alarm').val();
+		var pillQuantity = $('#txtPillQuantity').val();
 		var arrIntakeTimes = [];
 		var hours = "";
 		var minutes = "";
-		
+		var objIntakeTime = new Object();
+		var objSingleIntakeTime = new Object();
 		var convertedTime = convertTo24Hour(selectedTime);
 		
 		var date = new Date();
@@ -357,27 +372,40 @@ $(document).ready(function() {
 		
 		if(clickedInterval=="weekly"){
 			for(var i=0;i<iteration;i++){
-				arrIntakeTimes.push((selectedDate.getTime()/1000)+((i+1)*604800));
+				objSingleIntakeTime = new Object();
+				objSingleIntakeTime.unixTimeStamp =(selectedDate.getTime()/1000)+((i+1)*604800);
+				//arrIntakeTimes.push((selectedDate.getTime()/1000)+((i+1)*604800));
+				objSingleIntakeTime.pillQuantity = pillQuantity;
+				arrIntakeTimes.push(objSingleIntakeTime);
 			}	
 		} else if(clickedInterval=="monthly"){
 			for(var i=0;i<iteration;i++){
-				arrIntakeTimes.push((selectedDate.getTime()/1000)+((i+1)*2629743));
+				objSingleIntakeTime = new Object();
+				objSingleIntakeTime.unixTimeStamp = (selectedDate.getTime()/1000)+((i+1)*2629743);
+				objSingleIntakeTime.pillQuantity = pillQuantity;
+				arrIntakeTimes.push(objSingleIntakeTime);
+				//arrIntakeTimes.push((selectedDate.getTime()/1000)+((i+1)*2629743));
 			}
 		} else if(clickedInterval=="daily"){
 			for(var i=0;i<iteration;i++){
-				arrIntakeTimes.push((selectedDate.getTime()/1000)+((i+1)*86400));
+				objSingleIntakeTime = new Object();
+				objSingleIntakeTime.unixTimeStamp = (selectedDate.getTime()/1000)+((i+1)*86400);
+				objSingleIntakeTime.pillQuantity = pillQuantity;
+				arrIntakeTimes.push(objSingleIntakeTime);
+				//arrIntakeTimes.push((selectedDate.getTime()/1000)+((i+1)*86400));
 			}
 		} else {
-			arrIntakeTimes.push((selectedDate.getTime()/1000));
+			objSingleIntakeTime = new Object();
+			objSingleIntakeTime.unixTimeStamp = selectedDate.getTime()/1000;
+			objSingleIntakeTime.pillQuantity = pillQuantity;
+			arrIntakeTimes.push(objSingleIntakeTime);
+			//arrIntakeTimes.push((selectedDate.getTime()/1000));
 		}
-		
-		objIntakeTime = new Object();
 		
 		if(localStorage.getItem("destination")=="addIntakeTime" || localStorage.getItem("destination")=="addOnlyIntakeTime"){
 			if(localStorage.getItem("destination")=="addIntakeTime"){
 				objIntakeTime.medicineID=getLastMedicineID()+1;	
 
-				console.log(addMoreIntakeTime);
 				if(addMoreIntakeTime==false){
 					saveMedicineInformation();
 				} 
@@ -387,8 +415,9 @@ $(document).ready(function() {
 			
 			objIntakeTime.intakeTime=arrIntakeTimes;
 
-		    jsonObjectIntakeTime = JSON.stringify(objIntakeTime);		
-		    arrObjIntakeTime.push(jsonObjectIntakeTime);
+		    jsonObjectIntakeTime = JSON.stringify(objIntakeTime);	
+		    alert(jsonObjectIntakeTime);
+		    //arrObjIntakeTime.push(jsonObjectIntakeTime);
 
 	    	createIntakeTimeInformation();
 		} else {
@@ -408,10 +437,11 @@ $(document).ready(function() {
 		objMedicineInformation.stock = localStorage.getItem("stock");
 		objMedicineInformation.pertinence = localStorage.getItem("pertinence");
 		objMedicineInformation.savetyStock = localStorage.getItem("savetyStock");
+		objMedicineInformation.contactType = localStorage.getItem("contactType");
 		
-
+		
 	    jsonObjMedicineInformation = JSON.stringify(objMedicineInformation);
-		
+	    console.log(jsonObjMedicineInformation);
 		arrayObjectMedicineInformation.push(jsonObjMedicineInformation);
 		createMedicineInformation();
 	}
@@ -422,7 +452,7 @@ $(document).ready(function() {
 	        contentType: 'application/json',
 	        url: "http://localhost:8080/smartmedicine/rest/medicineinformation/createIntakeTimeInformation",
 	        dataType: "json",
-	        data: JSON.stringify(arrObjIntakeTime),
+	        data: JSON.stringify(jsonObjectIntakeTime),
 	        success: function(data, textStatus, jqXHR){
 	        	var destination = localStorage.getItem("destination");
 	        	
@@ -567,7 +597,8 @@ $(document).ready(function() {
 	 * addMedicineInformation.html functions for the first and second page
 	 */
 		
-	/*$("#btnSaveMedicineInformation").click(function(){
+	$("#btnSaveMedicineInformation").click(function(){
+		console.log("hi");
 		objMedicineInformation.medicineName = localStorage.getItem("medicineName");
 		objMedicineInformation.disease = localStorage.getItem("disease");
 		objMedicineInformation.note = localStorage.getItem("note");
@@ -577,7 +608,7 @@ $(document).ready(function() {
 		
 		arrayObjectMedicineInformation.push(jsonObjMedicineInformation);
 		createMedicineInformation();
-	})*/
+	})
 	
 	
 	$('#btnAddMedicineForwardFirst').click(function(){
@@ -666,6 +697,7 @@ $(document).ready(function() {
 		localStorage.setItem("pertinence", "important");
 		document.getElementById("btnImportant").style.opacity = 1; 
 		document.getElementById("btnNormal").style.opacity = 0.3; 
+		$('#divContactPerson').show();
 	})
 	
 	$('#btnNormal').click(function(){
@@ -673,6 +705,8 @@ $(document).ready(function() {
 		
 		document.getElementById("btnImportant").style.opacity = 0.3; 
 		document.getElementById("btnNormal").style.opacity = 1; 
+		
+		$('#divContactPerson').hide();
 	})
 	
 	$( "#txtStock" ).keyup(function() {
@@ -799,6 +833,7 @@ $(document).ready(function() {
 			    		
 			    		$("<tr><td><font>"+date+"</font></td>" 
 			    		+ "<td><font>"+time+"</font></td>" 
+			    		+ "<td><font>asdf</font></td>" 
 			    		+ "<td><font>eins</font></td>" +
 			    		+ "<td><font>zwei</font></td></tr>").appendTo("table[id='example']");
 			    		
@@ -1296,6 +1331,7 @@ $(document).ready(function() {
 			    		
 			    		$("<tr><td><font>" +date+"</font></td>"+
 			    		  "<td><font>"+time+"</td>" +
+			    		  "<td><font>"+data.intaketime[i].pillQuantity+"</td>" +
 			    		  "<td><font>"+nofiticationStatus+"</font></td>" +
 			    		  "<td><font>"+intakeStatus+"</font></td></tr>").appendTo("table[id='example']");
 			    	}		    

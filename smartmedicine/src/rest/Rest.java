@@ -173,7 +173,7 @@ public class Rest {
 	  	dbstatement = new DBStatements();
 	  	
 	  	JSONArray arr = new JSONArray(objMedicineInformation.toString());
-
+	  	System.out.println(objMedicineInformation);
 	  	Medicine medicine = null;
 	  	
 		for (int i=0; i<arr.length(); i++){
@@ -187,6 +187,7 @@ public class Rest {
 			medicine.setPertinence(jsonMedicineObject.getString("pertinence"));
 			medicine.setPertinence(jsonMedicineObject.getString("pertinence"));
 			medicine.setSavetyStock(jsonMedicineObject.getInt("savetyStock"));
+			medicine.setContactType(jsonMedicineObject.getString("contactType"));
 			
 			dbstatement.createMedicine(medicine);
 		}	
@@ -234,26 +235,50 @@ public class Rest {
 	  @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	  @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	  public void createIntakeTimeInformation(Object objIntakeTimeInformation) throws JSONException, ClassNotFoundException, SQLException, ParseException, IOException, org.codehaus.jettison.json.JSONException {
-	  	jsonObject = new JSONObject();
-	  	dbstatement = new DBStatements();
-	  	IntakeTime intakeTime = null;
-	  	ArrayList<Integer> listIntegerIntakeTime =  new ArrayList<Integer>();
-	  	  	
-	  	JSONArray arr = new JSONArray(objIntakeTimeInformation.toString());
+	  	jsonObject = new JSONObject(objIntakeTimeInformation.toString());
+	  	JSONObject objSingleIntkaeTime = null; 
 	  	
-	  	for(int i=0;i<arr.length();i++){
+	  	dbstatement = new DBStatements();
+	  	
+	  	IntakeTime intakeTime = null;
+	  	ArrayList<IntakeTime> listIntakeTimes =  new ArrayList<IntakeTime>();
+	  	
+	  	int medicineID = jsonObject.getInt("medicineID");
+	  	
+	  	for(int i=0; i<jsonObject.getJSONArray("intakeTime").length();i++){
+	  		intakeTime = new IntakeTime();
+	  		objSingleIntkaeTime = jsonObject.getJSONArray("intakeTime").getJSONObject(i);
+	  		intakeTime.setIntakeTimeUnix(objSingleIntkaeTime.getInt("unixTimeStamp"));
+	  		intakeTime.setPillQuantity(objSingleIntkaeTime.getInt("pillQuantity"));
+	  		listIntakeTimes.add(intakeTime);
+	  	}
+	  	  	
+	  	dbstatement.createIntakeTimeInformation(listIntakeTimes, medicineID);
+
+	  	
+	  	//JSONArray arr = new JSONArray(objIntakeTimeInformation.toString());
+	  	
+	  //	[{"medicineID":"3","intakeTime":[{"unixTimeStamp":1484665800,"pillQuantity":"3"}]}]
+	  			
+
+	  	
+	  /*	for(int i=0;i<arr.length();i++){
 	  		intakeTime = new IntakeTime();
 	  		org.codehaus.jettison.json.JSONObject jsonIntakeTime = arr.getJSONObject(i);
 	  		
 	  		for(int k=0; k<jsonIntakeTime.getJSONArray("intakeTime").length();k++){
+	  			
+	  			org.codehaus.jettison.json.JSONObject jsonSingleIntakeTime = jsonIntakeTime.getJSONArray("intakeTime").getJSONObject(k);
+	  			System.out.println(jsonSingleIntakeTime.getInt("unixTimeStamp"));
+	  			/*
 	  			listIntegerIntakeTime.add(jsonIntakeTime.getJSONArray("intakeTime").getInt(k));
-	  		}
-	  		
+	  		*//*}
+	  		/*
 		  	intakeTime.setMedicineID(jsonIntakeTime.getInt("medicineID"));
 		  	intakeTime.setListIntakteTimeUnix(listIntegerIntakeTime);
-	  	}
+	  	}*/
 
-  		dbstatement.createIntakeTimeInformation(intakeTime);
+  		/*dbstatement.createIntakeTimeInformation(intakeTime);*/
 	  }
 	  
 	  
